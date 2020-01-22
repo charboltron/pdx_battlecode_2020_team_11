@@ -1,5 +1,6 @@
 package examplefuncsplayer;
 import battlecode.common.*;
+//jhaf//
 
 public strictfp class RobotPlayer {
     static RobotController rc;
