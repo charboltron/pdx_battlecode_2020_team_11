@@ -22,6 +22,7 @@ src/lectureplayer
 *.iws
 /.idea/
 
+gradle.properties
 
 # User-specific stuff:
 battlecode-scaffold.iws
