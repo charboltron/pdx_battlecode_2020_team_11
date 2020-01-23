@@ -1,6 +1,8 @@
 package examplefuncsplayer;
 import battlecode.common.*;
 
+import java.sql.SQLOutput;
+
 public strictfp class RobotPlayer {
     static RobotController rc;
 
@@ -68,8 +70,14 @@ public strictfp class RobotPlayer {
     }
 
     static void runMiner() throws GameActionException {
+
         tryBlockchain();
-        tryMove(randomDirection());
+
+        int myId = rc.getID();
+        if(myId % 3 == 0) {
+            tryMove(directions[turnCount % 8]);
+        }
+
         if (tryMove(randomDirection()))
             System.out.println("I moved!");
         // tryBuild(randomSpawnedByMiner(), randomDirection());
@@ -198,6 +206,7 @@ public strictfp class RobotPlayer {
      */
     static boolean tryMine(Direction dir) throws GameActionException {
         if (rc.isReady() && rc.canMineSoup(dir)) {
+            System.out.println("In tryMine");
             rc.mineSoup(dir);
             return true;
         } else return false;
@@ -225,6 +234,7 @@ public strictfp class RobotPlayer {
                 message[i] = 123;
             }
             if (rc.canSubmitTransaction(message, 10))
+                System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 rc.submitTransaction(message, 10);
         }
         // System.out.println(rc.getRoundMessages(turnCount-1));
