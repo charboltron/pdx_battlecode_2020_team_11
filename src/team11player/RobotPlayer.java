@@ -1,5 +1,6 @@
-package examplefuncsplayer;
+package team11player;
 import battlecode.common.*;
+import lectureplayer.Util;
 
 public strictfp class RobotPlayer {
     static RobotController rc;
@@ -18,6 +19,8 @@ public strictfp class RobotPlayer {
             RobotType.FULFILLMENT_CENTER, RobotType.NET_GUN};
 
     static int turnCount;
+    static int numMiners = 0;
+    static int numDesignSchool = 0;
 
     /**
      * run() is the method that is called when a robot is instantiated in the Battlecode world.
@@ -63,13 +66,19 @@ public strictfp class RobotPlayer {
     }
 
     static void runHQ() throws GameActionException {
-        for (Direction dir : directions)
-            tryBuild(RobotType.MINER, dir);
+        if(numMiners < 10) {
+            for (Direction dir : directions)
+                if (tryBuild(RobotType.MINER, dir)) {
+                    numMiners++;
+                }
+
+        }
     }
 
     static void runMiner() throws GameActionException {
         tryBlockchain();
         tryMove(randomDirection());
+
         if (tryMove(randomDirection()))
             System.out.println("I moved!");
         // tryBuild(randomSpawnedByMiner(), randomDirection());
@@ -81,6 +90,14 @@ public strictfp class RobotPlayer {
         for (Direction dir : directions)
             if (tryMine(dir))
                 System.out.println("I mined soup! " + rc.getSoupCarrying());
+        for (Direction dir : directions)
+            if (numDesignSchool <= 5) {
+                if (tryBuild(RobotType.DESIGN_SCHOOL, randomDirection())) {
+                    System.out.println("build a Design School");
+                    numDesignSchool++;
+                }
+            }
+
     }
 
     static void runRefinery() throws GameActionException {
@@ -92,6 +109,7 @@ public strictfp class RobotPlayer {
     }
 
     static void runDesignSchool() throws GameActionException {
+        tryBuild(RobotType.LANDSCAPER,Direction.EAST);
 
     }
 
@@ -107,7 +125,7 @@ public strictfp class RobotPlayer {
     static void runDeliveryDrone() throws GameActionException {
         Team enemy = rc.getTeam().opponent();
         if (!rc.isCurrentlyHoldingUnit()) {
-            // See if there are any enemy robots within capturing range
+            // See if there are any enemy robots within striking range (distance 1 from lumberjack's radius)
             RobotInfo[] robots = rc.senseNearbyRobots(GameConstants.DELIVERY_DRONE_PICKUP_RADIUS_SQUARED, enemy);
 
             if (robots.length > 0) {
