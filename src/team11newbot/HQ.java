@@ -1,4 +1,4 @@
-package lectureplayer;
+package team11newbot;
 import battlecode.common.*;
 
 public class HQ extends Shooter {
