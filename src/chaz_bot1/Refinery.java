@@ -16,7 +16,6 @@ public class Refinery extends Building {
         super.takeTurn();
 
 
-
         }
 
 }
