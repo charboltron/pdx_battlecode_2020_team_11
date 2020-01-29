@@ -7,6 +7,7 @@ public class Miner extends Unit {
 
     int numDesignSchools = 0;
     int numRefineries = 0;
+
     MapLocation nearestRefinery = null;
 
     ArrayList<MapLocation> soupLocations = new ArrayList<MapLocation>();
@@ -38,7 +39,7 @@ public class Miner extends Unit {
                 System.out.println("I refined soup! " + rc.getTeamSoup());
 
         if (numRefineries < 3){
-            if(!hqLoc.isWithinDistanceSquared(rc.getLocation(), 4) && tryBuild(RobotType.REFINERY, Util.randomDirection()))
+            if(!hqLoc.isWithinDistanceSquared(rc.getLocation(), 30) && tryBuild(RobotType.REFINERY, Util.randomDirection()))
                 System.out.println("created a refinery");
         }
 
@@ -51,9 +52,11 @@ public class Miner extends Unit {
             // time to go back to the HQ or find a refinery
             if(numRefineries > 0){
                 if(nearestRefinery != null && rc.getLocation().isAdjacentTo(nearestRefinery)){
-                    tryRefine(rc.getLocation().directionTo(nearestRefinery));
-                } else {
+                    if(tryRefine(rc.getLocation().directionTo(nearestRefinery))){
+                        System.out.println("=========================refined at actual refinery");
+                    }
 
+                } else {
                     RobotInfo[] robots = rc.senseNearbyRobots();
                     for (RobotInfo robot : robots) {
                         if (robot.type == RobotType.REFINERY && robot.team == rc.getTeam()) {
