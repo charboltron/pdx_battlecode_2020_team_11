@@ -6,6 +6,8 @@ import java.util.ArrayList;
 public class Miner extends Unit {
 
     int numDesignSchools = 0;
+    int numFCenter =0;
+    int numVaporator =0;
     ArrayList<MapLocation> soupLocations = new ArrayList<MapLocation>();
 
     public Miner(RobotController r) {
@@ -17,6 +19,7 @@ public class Miner extends Unit {
 
         numDesignSchools += comms.getNewDesignSchoolCount();
         comms.updateSoupLocations(soupLocations);
+
         checkIfSoupGone();
 
         for (Direction dir : Util.directions)
@@ -32,9 +35,38 @@ public class Miner extends Unit {
             if (tryRefine(dir))
                 System.out.println("I refined soup! " + rc.getTeamSoup());
 
-        if (numDesignSchools < 3){
+
+        /*if (numDesignSchools < 3){
             if(tryBuild(RobotType.DESIGN_SCHOOL, Util.randomDirection()))
                 System.out.println("created a design school");
+                numDesignSchools++;
+        }*/
+
+
+        if (numDesignSchools < 2) {
+            if (tryBuild(RobotType.DESIGN_SCHOOL, Util.randomDirection())) {
+                System.out.println("build a Design School");
+            }
+         else{}
+        }
+
+        numVaporator = 0;
+        RobotInfo [] nearbyVaporators = rc.senseNearbyRobots();
+        for (RobotInfo r : nearbyVaporators) {
+            if (r.type == RobotType.VAPORATOR) {
+                numVaporator++;
+            }
+        }
+        if (rc.getTeamSoup() > 500 && rc.getRoundNum() > 300 && numVaporator < 1) {
+            if (tryBuild(RobotType.VAPORATOR, Util.randomDirection())) {
+                System.out.println("Teamsoup: " + rc.getTeamSoup() + ", RoundNum: " + rc.getRoundNum() + " build a Vaporator");
+            }
+        }
+        if (numFCenter < 1){
+            if(tryBuild(RobotType.FULFILLMENT_CENTER,Direction.EAST)){
+                System.out.println("made fulfiilment center");
+                numFCenter++;
+            }
         }
 
         if (rc.getSoupCarrying() == RobotType.MINER.soupLimit) {
@@ -87,4 +119,5 @@ public class Miner extends Unit {
             }
         }
     }
+
 }
