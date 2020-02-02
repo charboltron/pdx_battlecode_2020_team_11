@@ -7,6 +7,8 @@ public class Miner extends Unit {
 
     int numDesignSchools = 0;
     int numRefineries = 0;
+    int numFulFillmentCenters = 0;
+    int numVaporators = 0;
 
     MapLocation nearestRefinery = null;
 
@@ -19,9 +21,10 @@ public class Miner extends Unit {
     public void takeTurn() throws GameActionException {
         super.takeTurn();
 
-        numDesignSchools += comms.getNewDesignSchoolCount();
-        numRefineries    += comms.getNewRefineryCount();
-        System.out.println("Number of Refineries = "+numRefineries);
+        numDesignSchools      += comms.getBuildingCount(RobotType.DESIGN_SCHOOL,        rc.getTeam());
+        numRefineries         += comms.getBuildingCount(RobotType.REFINERY,             rc.getTeam());
+        numFulFillmentCenters += comms.getBuildingCount(RobotType.FULFILLMENT_CENTER,   rc.getTeam());
+        numVaporators         += comms.getBuildingCount(RobotType.VAPORATOR,            rc.getTeam());
         comms.updateSoupLocations(soupLocations);
         checkIfSoupGone();
 
@@ -38,14 +41,21 @@ public class Miner extends Unit {
             if (tryRefine(dir))
                 System.out.println("I refined soup! " + rc.getTeamSoup());
 
-        if (numRefineries < 3){
+        if (numDesignSchools < 3){
+            if(!hqLoc.isWithinDistanceSquared(rc.getLocation(), 8) && tryBuild(RobotType.DESIGN_SCHOOL, Util.randomDirection()))
+                System.out.println("created a design school");
+        }
+
+
+        else if (numRefineries < 3){
             if(!hqLoc.isWithinDistanceSquared(rc.getLocation(), 30) && tryBuild(RobotType.REFINERY, Util.randomDirection()))
                 System.out.println("created a refinery");
         }
 
-        else if (numDesignSchools < 3){
-            if(tryBuild(RobotType.DESIGN_SCHOOL, Util.randomDirection()))
-                System.out.println("created a design school");
+        else if (numFulFillmentCenters < 2){
+            if(tryBuild(RobotType.FULFILLMENT_CENTER, Util.randomDirection())){
+                System.out.println("created a fulfillment center");
+            }
         }
 
         if (rc.getSoupCarrying() == RobotType.MINER.soupLimit) {
@@ -53,7 +63,7 @@ public class Miner extends Unit {
             if(numRefineries > 0){
                 if(nearestRefinery != null && rc.getLocation().isAdjacentTo(nearestRefinery)){
                     if(tryRefine(rc.getLocation().directionTo(nearestRefinery))){
-                        System.out.println("=========================refined at actual refinery");
+                        System.out.println("refined at actual refinery");
                     }
 
                 } else {

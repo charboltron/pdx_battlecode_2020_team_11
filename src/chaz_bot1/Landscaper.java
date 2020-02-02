@@ -1,9 +1,8 @@
 package chaz_bot1;
 
-import battlecode.common.Direction;
-import battlecode.common.GameActionException;
-import battlecode.common.MapLocation;
-import battlecode.common.RobotController;
+import battlecode.common.*;
+
+import java.util.Map;
 
 public class Landscaper extends Unit {
 
@@ -14,16 +13,17 @@ public class Landscaper extends Unit {
     public void takeTurn() throws GameActionException {
         super.takeTurn();
 
+        MapLocation myLoc = rc.getLocation();
         // first, save HQ by trying to remove dirt from it
         if (hqLoc != null && hqLoc.isAdjacentTo(rc.getLocation())) {
-            Direction dirtohq = rc.getLocation().directionTo(hqLoc);
+            Direction dirtohq = myLoc.directionTo(hqLoc);
             if(rc.canDigDirt(dirtohq)){
                 rc.digDirt(dirtohq);
             }
         }
 
         if(rc.getDirtCarrying() == 0){
-            tryDig();
+            tryDig(myLoc);
         }
 
         MapLocation bestPlaceToBuildWall = null;
@@ -32,8 +32,8 @@ public class Landscaper extends Unit {
             int lowestElevation = 9999999;
             for (Direction dir : Util.directions) {
                 MapLocation tileToCheck = hqLoc.add(dir);
-                if(rc.getLocation().distanceSquaredTo(tileToCheck) < 4
-                        && rc.canDepositDirt(rc.getLocation().directionTo(tileToCheck))) {
+                if(myLoc.distanceSquaredTo(tileToCheck) < 4
+                        && rc.canDepositDirt(myLoc.directionTo(tileToCheck))) {
                     if (rc.senseElevation(tileToCheck) < lowestElevation) {
                         lowestElevation = rc.senseElevation(tileToCheck);
                         bestPlaceToBuildWall = tileToCheck;
@@ -42,10 +42,22 @@ public class Landscaper extends Unit {
             }
         }
 
-        if (Math.random() < 0.8){
+        if(myLoc.distanceSquaredTo(hqLoc) <= 4) {
+            RobotInfo[] robots = rc.senseNearbyRobots();
+            for (RobotInfo robot : robots) {
+                for(RobotType robotType : Util.spawnedByMiner){
+                    if(robot.getType() == robotType){
+                        nav.goTo(hqLoc);
+                    }
+                }
+            }
+        }
+
+
+        if (Math.random() < 0.8){ //TODO: investigate changing this random number
             // build the wall
             if (bestPlaceToBuildWall != null) {
-                rc.depositDirt(rc.getLocation().directionTo(bestPlaceToBuildWall));
+                rc.depositDirt(myLoc.directionTo(bestPlaceToBuildWall));
                 rc.setIndicatorDot(bestPlaceToBuildWall, 0, 255, 0);
                 System.out.println("building a wall");
             }
@@ -59,16 +71,16 @@ public class Landscaper extends Unit {
         }
     }
 
-    boolean tryDig() throws GameActionException {
+    boolean tryDig(MapLocation myLoc) throws GameActionException {
         Direction dir;
         if(hqLoc == null){
             dir = Util.randomDirection();
         } else {
-            dir = hqLoc.directionTo(rc.getLocation());
+            dir = hqLoc.directionTo(myLoc);
         }
         if(rc.canDigDirt(dir)){
             rc.digDirt(dir);
-            rc.setIndicatorDot(rc.getLocation().add(dir), 255, 0, 0);
+            rc.setIndicatorDot(myLoc.add(dir), 255, 0, 0);
             return true;
         }
         return false;

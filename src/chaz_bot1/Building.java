@@ -2,6 +2,7 @@ package chaz_bot1;
 
 import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
+import battlecode.common.RobotType;
 
 public class Building extends Robot {
 
@@ -12,5 +13,7 @@ public class Building extends Robot {
 
     public void takeTurn() throws GameActionException {
         super.takeTurn();
+        comms.broadcastBuildingCreation(rc.getLocation(), rc.getType(), rc.getTeam(), 0); //only happens on creation
+
     }
 }

@@ -14,7 +14,10 @@ public class DesignSchool extends Building {
         super.takeTurn();
         
         // will only actually happen if we haven't already broadcasted the creation
-        comms.broadcastDesignSchoolCreation(rc.getLocation());
+        //        comms.broadcastBuildingCreation(rc.getLocation(), RobotType.DESIGN_SCHOOL, rc.getTeam(), 0);
+
+        //moved comms to building class leaving here for now to see if it works as intended
+
 
         for (Direction dir : Util.directions) {
             if(tryBuild(RobotType.LANDSCAPER, dir)) {

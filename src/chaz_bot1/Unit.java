@@ -26,6 +26,9 @@ public class Unit extends Robot {
                 if (robot.type == RobotType.HQ && robot.team == rc.getTeam()) {
                     hqLoc = robot.location;
                 }
+                else{
+                    System.out.println("I can't find HQ!");
+                }
             }
             if(hqLoc == null) {
                 // if still null, search the blockchain

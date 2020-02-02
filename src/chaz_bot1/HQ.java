@@ -11,7 +11,7 @@ public class HQ extends Shooter {
     public HQ(RobotController r) throws GameActionException {
         super(r);
 
-        comms.sendHqLoc(rc.getLocation());
+//        comms.sendHqLoc(rc.getLocation());
     }
 
     public void takeTurn() throws GameActionException {
