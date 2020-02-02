@@ -1,16 +1,14 @@
-package chaz_bot1;
+package master_player;
 
 import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
 
-public class Building extends Robot {
-
-    public Building(RobotController r) {
+public class Refinery extends Building {
+    public Refinery(RobotController r) throws GameActionException {
         super(r);
-        // building specific setup here
     }
-
     public void takeTurn() throws GameActionException {
         super.takeTurn();
     }
 }
+

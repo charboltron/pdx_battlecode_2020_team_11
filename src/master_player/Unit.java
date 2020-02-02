@@ -1,5 +1,6 @@
-package chaz_bot1;
+package master_player;
 import battlecode.common.*;
+
 
 public class Unit extends Robot {
 
@@ -25,6 +26,9 @@ public class Unit extends Robot {
             for (RobotInfo robot : robots) {
                 if (robot.type == RobotType.HQ && robot.team == rc.getTeam()) {
                     hqLoc = robot.location;
+                }
+                else{
+                    System.out.println("I can't find HQ!");
                 }
             }
             if(hqLoc == null) {

@@ -1,4 +1,4 @@
-package chaz_bot1;
+package master_player;
 
 import battlecode.common.RobotController;
 

@@ -1,6 +1,7 @@
-package chaz_bot1;
+package master_player;
 
 import battlecode.common.Direction;
+import battlecode.common.RobotType;
 
 // This is a file to accumulate all the random helper functions
 // which don't interact with the game, but are common enough to be used in multiple places.
@@ -16,6 +17,9 @@ public class Util {
         Direction.WEST,
         Direction.NORTHWEST
     };
+
+    static RobotType[] spawnedByMiner = {RobotType.REFINERY, RobotType.VAPORATOR, RobotType.DESIGN_SCHOOL,
+            RobotType.FULFILLMENT_CENTER, RobotType.NET_GUN};
 
     /**
      * Returns a random Direction.
