@@ -91,12 +91,16 @@ public class Communications {
 
     public int getBuildingCount(RobotType buildingType, Team team) throws GameActionException{
 
+        String teamMsg = "";
+        if(team == team.opponent()){
+            teamMsg = "enemy";
+        }
         int count = 0;
         int buildingCode = getBuildingCode(buildingType, team);
         for(Transaction tx : rc.getBlock(rc.getRoundNum() - 1)) {
             int[] mess = tx.getMessage();
             if(mess[0] == teamSecret && mess[1] == buildingCode){
-                System.out.println("heard about a new: "+team.toString()+" "+buildingType.toString());
+                System.out.println("heard about a new: "+teamMsg+" "+buildingType.toString());
                 count += 1;
             }
         }

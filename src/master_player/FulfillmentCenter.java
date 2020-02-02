@@ -3,7 +3,7 @@ package master_player;
 import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
 
-public class FulfillmentCenter extends Unit {
+public class FulfillmentCenter extends Building {
     static int numDrones = 0;
     public FulfillmentCenter(RobotController r) { super(r); }
 

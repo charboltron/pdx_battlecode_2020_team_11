@@ -66,7 +66,7 @@ public class Miner extends Unit {
             }
         }
         if (numFulFillmentCenters < 1){
-            if(tryBuild(RobotType.FULFILLMENT_CENTER,Direction.EAST)){
+            if(tryBuild(RobotType.FULFILLMENT_CENTER,Direction.EAST)){ //why are we building to the east?
                 System.out.println("created a fulfillment center");
                 //numFCenter++; can't do this either, needs to go through comms
 
