@@ -5,7 +5,8 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class RobotTest {
+public class BuildingTest {
+
 
     RobotController rc = new RobotController() {
         @Override
@@ -298,32 +299,20 @@ public class RobotTest {
 
         }
     };
-
-
-    @Test
-    public void newlyCreatedRobotHasInitialTurnCountOfZero() {
-
-        Robot robot = new Robot(rc);
-        assertEquals(0, robot.turnCount);
-    }
+    Building building = new Building(rc);
 
     @Test
-    public void takingTurnIncrementsTurnCount() throws GameActionException{
+    public void whenBuildingIsCreatedItsBuildingCountIsIncremented() throws GameActionException {
 
-        Robot robot = new Robot(rc);
-        robot.takeTurn();
-        assertEquals(1, robot.turnCount);
-        robot.takeTurn();
-        assertEquals(2, robot.turnCount);
+        int myCount = building.comms.getBuildingCount(rc.getType(), rc.getTeam());
+        assertEquals(1, myCount);
 
     }
 
     @Test
-    public void successfulBuildBuildingReturnsTrue() throws GameActionException {
-
-        Robot robot = new Robot(rc);
-        robot.tryBuild(RobotType.MINER, Util.randomDirection());
-
-
+    public void takeTurnWorksAsExpected() throws GameActionException {
+        building.takeTurn();
+        assertEquals(1, building.turnCount);
     }
+
 }

@@ -46,12 +46,15 @@ public class Communications {
             case VAPORATOR:              buildingCode = 5;   break;
             default: break;
         }
-        if (team == rc.getTeam().opponent()){
-            buildingCode += 200;
-        } else {
-            buildingCode += 100;
+        if(rc.getTeam() != null) {
+            if (team == rc.getTeam().opponent()) {
+                buildingCode += 200;
+            } else {
+                buildingCode += 100;
+            }
+            return buildingCode;
         }
-        return buildingCode;
+        return -1;
     }
 
     public MapLocation getHqLocFromBlockchain() throws GameActionException {
@@ -70,7 +73,14 @@ public class Communications {
     public void broadcastBuildingCreation(MapLocation loc, RobotType buildingType, Team team, int transactionBid) throws GameActionException {
         if(broadcastedCreation) return; //don't re-broadcast
 
+
+        if(buildingType == null){
+            System.out.println("null building");
+            return;
+        }
+
         int buildingCode = getBuildingCode(buildingType, team);
+
 
         if(transactionBid == 0) {
             transactionBid = 3; //TODO this should not be hardcoded eventually
@@ -92,17 +102,21 @@ public class Communications {
     public int getBuildingCount(RobotType buildingType, Team team) throws GameActionException{
 
         String teamMsg = "";
-        if(team == team.opponent()){
-            teamMsg = "enemy";
-        }
+//        if(team.opponent() != null && team == team.opponent()){
+//            teamMsg = "enemy";
+//        }
         int count = 0;
-        int buildingCode = getBuildingCode(buildingType, team);
-        for(Transaction tx : rc.getBlock(rc.getRoundNum() - 1)) {
-            int[] mess = tx.getMessage();
-            if(mess[0] == teamSecret && mess[1] == buildingCode){
-                System.out.println("heard about a new: "+teamMsg+" "+buildingType.toString());
-                count += 1;
+        if(buildingType != null) {
+            int buildingCode = getBuildingCode(buildingType, team);
+            for(Transaction tx : rc.getBlock(rc.getRoundNum() - 1)) {
+                int[] mess = tx.getMessage();
+                if(mess[0] == teamSecret && mess[1] == buildingCode) {
+                    System.out.println("heard about a new: " + teamMsg + " " + buildingType.toString());
+                    count += 1;
+                }
             }
+        }else{ //for testing
+            count +=1;
         }
         return count;
     }

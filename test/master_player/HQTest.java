@@ -1,11 +1,13 @@
 package master_player;
 
 import battlecode.common.*;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class RobotTest {
+public class HQTest {
+
 
     RobotController rc = new RobotController() {
         @Override
@@ -298,32 +300,31 @@ public class RobotTest {
 
         }
     };
+    HQ hq;
+
+    {
+        try {
+            hq = new HQ(rc);
+        } catch (GameActionException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     @Test
-    public void newlyCreatedRobotHasInitialTurnCountOfZero() {
+    public void whenHQIsCreatedItsBuildingCountIsIncremented() throws GameActionException {
 
-        Robot robot = new Robot(rc);
-        assertEquals(0, robot.turnCount);
-    }
-
-    @Test
-    public void takingTurnIncrementsTurnCount() throws GameActionException{
-
-        Robot robot = new Robot(rc);
-        robot.takeTurn();
-        assertEquals(1, robot.turnCount);
-        robot.takeTurn();
-        assertEquals(2, robot.turnCount);
+        int myCount = hq.comms.getBuildingCount(rc.getType(), rc.getTeam());
+        assertEquals(1, myCount);
 
     }
 
     @Test
-    public void successfulBuildBuildingReturnsTrue() throws GameActionException {
+    public void takeTurnWorksAsExpected() throws GameActionException {
 
-        Robot robot = new Robot(rc);
-        robot.tryBuild(RobotType.MINER, Util.randomDirection());
-
+        hq.takeTurn();
+        assertEquals(1, hq.turnCount);
 
     }
+
 }
