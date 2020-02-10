@@ -2,6 +2,7 @@ package master_player;
 import battlecode.common.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Miner extends Unit {
 
@@ -46,12 +47,6 @@ public class Miner extends Unit {
                 System.out.println("created a design school");
         }
 
-
-        else if (numRefineries < 3){
-            if(!hqLoc.isWithinDistanceSquared(rc.getLocation(), 30) && tryBuild(RobotType.REFINERY, Util.randomDirection()))
-                System.out.println("created a refinery");
-        }
-
         //numVaporator = 0; this shouldn't be here
         RobotInfo [] nearbyVaporators = rc.senseNearbyRobots();
         for (RobotInfo r : nearbyVaporators) {
@@ -73,15 +68,22 @@ public class Miner extends Unit {
             }
         }
 
-        //HEY SON, You can do whatever you want with the refinery code here, change it, delete it, whatever you need to do.
+        // if miner carrying maximum amount of soup
         if (rc.getSoupCarrying() == RobotType.MINER.soupLimit) {
             // time to go back to the HQ or find a refinery
+            // if refineries = 0
             if(numRefineries > 0){
-                if(nearestRefinery != null && rc.getLocation().isAdjacentTo(nearestRefinery)){
-                    if(tryRefine(rc.getLocation().directionTo(nearestRefinery))){
-                        System.out.println("refined at actual refinery");
+                // if there is a nearby refinary, and adjacent to robot, try refine
+                if(nearestRefinery != null){
+                    if(rc.getLocation().isAdjacentTo(nearestRefinery)){
+                        if (tryRefine(rc.getLocation().directionTo(nearestRefinery))) {
+                            System.out.println("refined at actual refinery");
+                        }
                     }
-
+                    else{
+                        nav.goTo(nearestRefinery);
+                    }
+                // if there is not a nearby refinary, or refinery adjacent to robot, try to sense for a nearby refinery
                 } else {
                     RobotInfo[] robots = rc.senseNearbyRobots();
                     for (RobotInfo robot : robots) {
@@ -91,15 +93,43 @@ public class Miner extends Unit {
                     }
                 }
             }
+            // if we have no refineries, go to HQ
             if(nav.goTo(hqLoc))
                 System.out.println("moved towards HQ");
+        // if there is a soup location, go to it
         } else if (soupLocations.size() > 0) {
             nav.goTo(soupLocations.get(0));
             rc.setIndicatorLine(rc.getLocation(), soupLocations.get(0), 255, 255, 0);
-        } else if (nav.goTo(Util.randomDirection())) {
-            // otherwise, move randomly as usual
-            System.out.println("I moved randomly!");
+        // if there is no soup locations, try sensing for it. If cannot find any soup locations nearby, move around
+        } else {
+            if(soupLocations.size() == 0){
+            soupLocations.addAll(Arrays.asList(rc.senseNearbySoup()));
+            }
+            if (soupLocations.size() > 0){
+                if (numRefineries < 3){
+                    if(!hqLoc.isWithinDistanceSquared(rc.getLocation(), 15) && tryBuild(RobotType.REFINERY, Util.randomDirection()))
+                        System.out.println("created a refinery");
+                }
+            } else {
+                if(rc.canMove(Direction.NORTH)){
+                    rc.move(Direction.NORTH);
+                } else if(rc.canMove(Direction.NORTHEAST)){
+                    rc.move(Direction.NORTHEAST);
+                } else if (rc.canMove(Direction.NORTHWEST)){
+                    rc.move(Direction.NORTHWEST);
+                } else if (rc.canMove(Direction.SOUTHEAST)){
+                    rc.move(Direction.SOUTHEAST);
+                } else if (rc.canMove(Direction.SOUTH)){
+                    rc.move(Direction.SOUTH);
+                }
+
+            }
         }
+
+//        else if (nav.goTo(Util.randomDirection())) {
+//            // otherwise, move randomly as usual
+//            System.out.println("I moved randomly!");
+//        }
     }
 
     /**
