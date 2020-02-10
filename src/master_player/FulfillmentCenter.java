@@ -5,7 +5,7 @@ import battlecode.common.RobotController;
 
 public class FulfillmentCenter extends Building {
     static int numDrones = 0;
-    public FulfillmentCenter(RobotController r) { super(r); }
+    public FulfillmentCenter(RobotController r) throws GameActionException { super(r); }
 
     public void takeTurn() throws GameActionException{
         super.takeTurn();

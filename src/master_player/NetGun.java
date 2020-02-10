@@ -3,8 +3,8 @@ package master_player;
 import battlecode.common.GameActionException;
 import battlecode.common.RobotController;
 
-public class NetGun extends Shooter {
-    public NetGun(RobotController r) {
+public class NetGun extends Shooter{
+    public NetGun(RobotController r) throws GameActionException {
         super(r);
     }
 
