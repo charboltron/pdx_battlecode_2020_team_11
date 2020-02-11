@@ -8,7 +8,7 @@ public class DesignSchool extends Building {
 
     static int numLandscapers = 0;
 
-    public DesignSchool(RobotController r) {
+    public DesignSchool(RobotController r) throws GameActionException {
         super(r);
     }
 
