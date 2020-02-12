@@ -20,7 +20,7 @@ public class HQ extends Shooter {
                 }
         }
         // shoot nearby enemies
-        Team enemy = rc.getTeam().opponent();
+        /*Team enemy = rc.getTeam().opponent();
         RobotInfo[] enemiesInRange = rc.senseNearbyRobots(GameConstants.NET_GUN_SHOOT_RADIUS_SQUARED, enemy);
 
         for (RobotInfo e : enemiesInRange) {
@@ -30,6 +30,6 @@ public class HQ extends Shooter {
                     break;
                 }
             }
-        }
+        }*/
     }
 }

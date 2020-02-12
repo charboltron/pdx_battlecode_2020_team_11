@@ -27,6 +27,24 @@ public class Navigation {
             return true;
         } else return false;
     }
+    boolean droneMove(Direction dir) throws GameActionException {
+        Direction[] toTry =
+                {
+                        dir,
+                        dir.rotateLeft(),
+                        dir.rotateLeft().rotateLeft(),
+                        dir.rotateRight(),
+                        dir.rotateRight().rotateRight()
+                };
+
+        for (Direction d : toTry) {
+            if (rc.isReady() && rc.canMove(dir)) {
+                rc.move(d);
+                return true;
+            }
+        }
+        return false;
+    }
 
     // tries to move in the general direction of dir
     boolean goTo(Direction dir) throws GameActionException {

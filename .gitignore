@@ -1,5 +1,8 @@
 dist/*
 build/*
+/examplefuncsplayer
+/lectureplayer
+/team11newbot
 
 
 /matches

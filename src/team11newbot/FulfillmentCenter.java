@@ -11,11 +11,11 @@ public class FulfillmentCenter extends Unit {
 
     public void takeTurn() throws GameActionException{
         super.takeTurn();
-        /*if (numDrones <2) {
+        if (numDrones <2) {
             if (tryBuild(RobotType.DELIVERY_DRONE, Direction.EAST)) {
                 System.out.println("drone built");
                 numDrones++;
             }
-        }*/
+        }
     }
 }

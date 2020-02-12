@@ -2,7 +2,7 @@ package master_player;
 
 import battlecode.common.*;
 import org.junit.Test;
-import sun.nio.ch.Net;
+/*import sun.nio.ch.Net;*/
 
 import static org.junit.Assert.*;
 

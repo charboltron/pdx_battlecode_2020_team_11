@@ -52,23 +52,23 @@ public class Miner extends Unit {
                 System.out.println("created a refinery");
         }
 
-        //numVaporator = 0; this shouldn't be here
-        RobotInfo [] nearbyVaporators = rc.senseNearbyRobots();
+
+        /*RobotInfo [] nearbyVaporators = rc.senseNearbyRobots();
         for (RobotInfo r : nearbyVaporators) {
             if (r.type == RobotType.VAPORATOR) {
                 //numVaporators++; you can't update the amount of vaporators on a thread by thread basis, it has to go through comms
                 //I'm currently working on setting up the comms for this.
             }
-        }
-        if (rc.getTeamSoup() > 500 && rc.getRoundNum() > 300 && numVaporators < 1) {
+        }*/
+        /*if (rc.getTeamSoup() > 500 && rc.getRoundNum() > 300 && numVaporators < 1) {
             if (tryBuild(RobotType.VAPORATOR, Util.randomDirection())) {
                 System.out.println("Teamsoup: " + rc.getTeamSoup() + ", RoundNum: " + rc.getRoundNum() + " build a Vaporator");
             }
-        }
+        }*/
         if (numFulFillmentCenters < 1){
-            if(tryBuild(RobotType.FULFILLMENT_CENTER,Direction.EAST)){ //why are we building to the east?
+            if(tryBuild(RobotType.FULFILLMENT_CENTER, Util.randomDirection())){ //why are we building to the east?
                 System.out.println("created a fulfillment center");
-                //numFCenter++; can't do this either, needs to go through comms
+                numFulFillmentCenters++;
 
             }
         }
