@@ -42,24 +42,19 @@ public class Miner extends Unit {
             if (tryRefine(dir))
                 System.out.println("I refined soup! " + rc.getTeamSoup());
 
-        if (numDesignSchools < 3){
+        if (numDesignSchools < 1 && rc.getRoundNum() > 100){
             if(!hqLoc.isWithinDistanceSquared(rc.getLocation(), 8) && tryBuild(RobotType.DESIGN_SCHOOL, Util.randomDirection()))
                 System.out.println("created a design school");
         }
 
-        //numVaporator = 0; this shouldn't be here
-        RobotInfo [] nearbyVaporators = rc.senseNearbyRobots();
-        for (RobotInfo r : nearbyVaporators) {
-            if (r.type == RobotType.VAPORATOR) {
-                //numVaporators++; you can't update the amount of vaporators on a thread by thread basis, it has to go through comms
-                //I'm currently working on setting up the comms for this.
+        if (rc.getTeamSoup() > 500 && rc.getRoundNum() > 300&& numVaporators < 1) {
+            if (rc.getLocation().distanceSquaredTo(hqLoc) > 8) {
+                if (tryBuild(RobotType.VAPORATOR, Util.randomDirection())) {
+                    System.out.println("Teamsoup: " + rc.getTeamSoup() + ", RoundNum: " + rc.getRoundNum() + " build a Vaporator");
+                }
             }
         }
-        if (rc.getTeamSoup() > 500 && rc.getRoundNum() > 300 && numVaporators < 1) {
-            if (tryBuild(RobotType.VAPORATOR, Util.randomDirection())) {
-                System.out.println("Teamsoup: " + rc.getTeamSoup() + ", RoundNum: " + rc.getRoundNum() + " build a Vaporator");
-            }
-        }
+
         if (numFulFillmentCenters < 1){
             if(tryBuild(RobotType.FULFILLMENT_CENTER,Direction.EAST)){ //why are we building to the east?
                 System.out.println("created a fulfillment center");
@@ -107,30 +102,39 @@ public class Miner extends Unit {
             }
             if (soupLocations.size() > 0){
                 if (numRefineries < 3){
-                    if(!hqLoc.isWithinDistanceSquared(rc.getLocation(), 15) && tryBuild(RobotType.REFINERY, Util.randomDirection()))
-                        System.out.println("created a refinery");
+                    if(!hqLoc.isWithinDistanceSquared(rc.getLocation(), 15))
+                        if(tryBuild(RobotType.REFINERY, Util.randomDirection())) {
+                            System.out.println("created a refinery");
+                        }
                 }
             } else {
-                if(rc.canMove(Direction.NORTH)){
-                    rc.move(Direction.NORTH);
-                } else if(rc.canMove(Direction.NORTHEAST)){
-                    rc.move(Direction.NORTHEAST);
+//                if(nav.goTo(Util.randomDirection())) {
+//                    System.out.println("I moved randomly!");
+//                }
+                if(rc.canMove(Direction.SOUTHEAST)){
+                    nav.goTo(Direction.SOUTHEAST);
+                } else if(rc.canMove(Direction.SOUTHWEST)){
+                    nav.goTo(Direction.SOUTHWEST);
                 } else if (rc.canMove(Direction.NORTHWEST)){
-                    rc.move(Direction.NORTHWEST);
-                } else if (rc.canMove(Direction.SOUTHEAST)){
-                    rc.move(Direction.SOUTHEAST);
-                } else if (rc.canMove(Direction.SOUTH)){
-                    rc.move(Direction.SOUTH);
+                    nav.goTo(Direction.NORTHWEST);
+                } else if (rc.canMove(Direction.NORTHEAST)){
+                    nav.goTo(Direction.NORTHEAST);
                 }
 
             }
         }
-
-//        else if (nav.goTo(Util.randomDirection())) {
-//            // otherwise, move randomly as usual
-//            System.out.println("I moved randomly!");
-//        }
     }
+
+//    boolean checkNearByRobotType(RobotType type){
+//        RobotInfo [] nearbyRobots= rc.senseNearbyRobots();
+//        for (RobotInfo r : nearbyRobots) {
+//            if (r.type == type) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+
 
     /**
      * Attempts to mine soup in a given direction.
