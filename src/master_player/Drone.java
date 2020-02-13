@@ -14,7 +14,7 @@ public class Drone extends Unit {
     public void takeTurn() throws GameActionException{
         super.takeTurn();
 
-        //SOWMY This is what you commented out on the most recent version of the Drone class
+
 
         Team enemy = rc.getTeam().opponent();
         RobotInfo[] enemiesInRange = rc.senseNearbyRobots(GameConstants.NET_GUN_SHOOT_RADIUS_SQUARED, enemy);
@@ -31,10 +31,6 @@ public class Drone extends Unit {
             System.out.println("I picked up " + enemiesInRange[0].getID() + "!");
         }
 
-
-
-    //HEY SOWMY, this is code that I think you might have written? You can delete it if you don't need it I just
-    //wasn't sure whether this was useful.
 
 
         /*if (!rc.isCurrentlyHoldingUnit()) {
