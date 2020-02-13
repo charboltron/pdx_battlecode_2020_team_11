@@ -2,6 +2,7 @@ package master_player;
 import battlecode.common.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Miner extends Unit {
 
@@ -41,30 +42,19 @@ public class Miner extends Unit {
             if (tryRefine(dir))
                 System.out.println("I refined soup! " + rc.getTeamSoup());
 
-        if (numDesignSchools < 3){
+        if (numDesignSchools < 1 && rc.getRoundNum() > 100){
             if(!hqLoc.isWithinDistanceSquared(rc.getLocation(), 8) && tryBuild(RobotType.DESIGN_SCHOOL, Util.randomDirection()))
                 System.out.println("created a design school");
         }
 
-
-        else if (numRefineries < 3){
-            if(!hqLoc.isWithinDistanceSquared(rc.getLocation(), 30) && tryBuild(RobotType.REFINERY, Util.randomDirection()))
-                System.out.println("created a refinery");
-        }
-
-        //numVaporator = 0; this shouldn't be here
-        RobotInfo [] nearbyVaporators = rc.senseNearbyRobots();
-        for (RobotInfo r : nearbyVaporators) {
-            if (r.type == RobotType.VAPORATOR) {
-                //numVaporators++; you can't update the amount of vaporators on a thread by thread basis, it has to go through comms
-                //I'm currently working on setting up the comms for this.
+        if (rc.getTeamSoup() > 500 && rc.getRoundNum() > 300&& numVaporators < 1) {
+            if (rc.getLocation().distanceSquaredTo(hqLoc) > 8) {
+                if (tryBuild(RobotType.VAPORATOR, Util.randomDirection())) {
+                    System.out.println("Teamsoup: " + rc.getTeamSoup() + ", RoundNum: " + rc.getRoundNum() + " build a Vaporator");
+                }
             }
         }
-        if (rc.getTeamSoup() > 500 && rc.getRoundNum() > 300 && numVaporators < 1) {
-            if (tryBuild(RobotType.VAPORATOR, Util.randomDirection())) {
-                System.out.println("Teamsoup: " + rc.getTeamSoup() + ", RoundNum: " + rc.getRoundNum() + " build a Vaporator");
-            }
-        }
+
         if (numFulFillmentCenters < 1){
             if(tryBuild(RobotType.FULFILLMENT_CENTER,Direction.EAST)){ //why are we building to the east?
                 System.out.println("created a fulfillment center");
@@ -73,15 +63,22 @@ public class Miner extends Unit {
             }
         }
 
-        //HEY SON, You can do whatever you want with the refinery code here, change it, delete it, whatever you need to do.
+        // if miner carrying maximum amount of soup
         if (rc.getSoupCarrying() == RobotType.MINER.soupLimit) {
             // time to go back to the HQ or find a refinery
+            // if refineries = 0
             if(numRefineries > 0){
-                if(nearestRefinery != null && rc.getLocation().isAdjacentTo(nearestRefinery)){
-                    if(tryRefine(rc.getLocation().directionTo(nearestRefinery))){
-                        System.out.println("refined at actual refinery");
+                // if there is a nearby refinary, and adjacent to robot, try refine
+                if(nearestRefinery != null){
+                    if(rc.getLocation().isAdjacentTo(nearestRefinery)){
+                        if (tryRefine(rc.getLocation().directionTo(nearestRefinery))) {
+                            System.out.println("refined at actual refinery");
+                        }
                     }
-
+                    else{
+                        nav.goTo(nearestRefinery);
+                    }
+                // if there is not a nearby refinary, or refinery adjacent to robot, try to sense for a nearby refinery
                 } else {
                     RobotInfo[] robots = rc.senseNearbyRobots();
                     for (RobotInfo robot : robots) {
@@ -91,16 +88,53 @@ public class Miner extends Unit {
                     }
                 }
             }
+            // if we have no refineries, go to HQ
             if(nav.goTo(hqLoc))
                 System.out.println("moved towards HQ");
+        // if there is a soup location, go to it
         } else if (soupLocations.size() > 0) {
             nav.goTo(soupLocations.get(0));
             rc.setIndicatorLine(rc.getLocation(), soupLocations.get(0), 255, 255, 0);
-        } else if (nav.goTo(Util.randomDirection())) {
-            // otherwise, move randomly as usual
-            System.out.println("I moved randomly!");
+        // if there is no soup locations, try sensing for it. If cannot find any soup locations nearby, move around
+        } else {
+            if(soupLocations.size() == 0){
+            soupLocations.addAll(Arrays.asList(rc.senseNearbySoup()));
+            }
+            if (soupLocations.size() > 0){
+                if (numRefineries < 3){
+                    if(!hqLoc.isWithinDistanceSquared(rc.getLocation(), 15))
+                        if(tryBuild(RobotType.REFINERY, Util.randomDirection())) {
+                            System.out.println("created a refinery");
+                        }
+                }
+            } else {
+//                if(nav.goTo(Util.randomDirection())) {
+//                    System.out.println("I moved randomly!");
+//                }
+                if(rc.canMove(Direction.SOUTHEAST)){
+                    nav.goTo(Direction.SOUTHEAST);
+                } else if(rc.canMove(Direction.SOUTHWEST)){
+                    nav.goTo(Direction.SOUTHWEST);
+                } else if (rc.canMove(Direction.NORTHWEST)){
+                    nav.goTo(Direction.NORTHWEST);
+                } else if (rc.canMove(Direction.NORTHEAST)){
+                    nav.goTo(Direction.NORTHEAST);
+                }
+
+            }
         }
     }
+
+//    boolean checkNearByRobotType(RobotType type){
+//        RobotInfo [] nearbyRobots= rc.senseNearbyRobots();
+//        for (RobotInfo r : nearbyRobots) {
+//            if (r.type == type) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
+
 
     /**
      * Attempts to mine soup in a given direction.
