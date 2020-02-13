@@ -47,13 +47,13 @@ public class Miner extends Unit {
                 System.out.println("created a design school");
         }
 
-        if (rc.getTeamSoup() > 500 && rc.getRoundNum() > 300&& numVaporators < 1) {
+        /*if (rc.getTeamSoup() > 500 && rc.getRoundNum() > 300&& numVaporators < 1) {
             if (rc.getLocation().distanceSquaredTo(hqLoc) > 8) {
                 if (tryBuild(RobotType.VAPORATOR, Util.randomDirection())) {
                     System.out.println("Teamsoup: " + rc.getTeamSoup() + ", RoundNum: " + rc.getRoundNum() + " build a Vaporator");
                 }
             }
-        }
+        }*/
       
         if (numFulFillmentCenters < 1){
 

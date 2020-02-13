@@ -20,7 +20,7 @@ public class Drone extends Unit {
         RobotInfo[] enemiesInRange = rc.senseNearbyRobots(GameConstants.NET_GUN_SHOOT_RADIUS_SQUARED, enemy);
 
         /*rc.move(Util.randomDirection());*/
-        rc.move(rc.getLocation().directionTo(new MapLocation(5, 11)));
+        rc.move(rc.getLocation().directionTo(new MapLocation(33, 29)));
 
 
         /*System.out.println("I picked up"+ enemiesInRange[0].getID());*/
