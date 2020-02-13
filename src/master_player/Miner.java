@@ -66,7 +66,8 @@ public class Miner extends Unit {
             }
         }*/
         if (numFulFillmentCenters < 1){
-            if(tryBuild(RobotType.FULFILLMENT_CENTER, Util.randomDirection())){ //why are we building to the east?
+
+            if(tryBuild(RobotType.FULFILLMENT_CENTER, Util.randomDirection())){
                 System.out.println("created a fulfillment center");
                 numFulFillmentCenters++;
 

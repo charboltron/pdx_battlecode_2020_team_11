@@ -19,17 +19,18 @@ public class Drone extends Unit {
         Team enemy = rc.getTeam().opponent();
         RobotInfo[] enemiesInRange = rc.senseNearbyRobots(GameConstants.NET_GUN_SHOOT_RADIUS_SQUARED, enemy);
 
-        rc.move(Util.randomDirection());
+        /*rc.move(Util.randomDirection());*/
+        rc.move(rc.getLocation().directionTo(new MapLocation(5, 11)));
 
 
         /*System.out.println("I picked up"+ enemiesInRange[0].getID());*/
 
 
-        if (enemiesInRange.length > 0) {
+        /*if (enemiesInRange.length > 0) {
             // Pick up a first robot within range
             rc.pickUpUnit(enemiesInRange[0].getID());
             System.out.println("I picked up " + enemiesInRange[0].getID() + "!");
-        }
+        }*/
 
 
 

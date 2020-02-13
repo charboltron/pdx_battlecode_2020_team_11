@@ -17,7 +17,7 @@ public class FulfillmentCenter extends Building {
 
 
         if (turnCount % 10 ==0 && numDrones <2) {
-            if (tryBuild(RobotType.DELIVERY_DRONE,Util.randomDirection())) {
+            if (tryBuild(RobotType.DELIVERY_DRONE,Direction.NORTH)) {
                 System.out.println("drone built");
                 numDrones++;
 
