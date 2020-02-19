@@ -110,7 +110,7 @@ public class Miner extends Unit {
     }
 
     private void buildRefinery() throws GameActionException {
-        if (rc.isReady() && teamSoup > RobotType.REFINERY.cost && numRefineries < 3) {
+        if (rc.isReady() && teamSoup > RobotType.REFINERY.cost && numRefineries < 1) {
             if (!hqLoc.isWithinDistanceSquared(rc.getLocation(), 25)
                     && !nearestRefinery.isWithinDistanceSquared(rc.getLocation(), 25)
                     && tryBuild(RobotType.REFINERY, Util.randomDirection()))
@@ -144,8 +144,9 @@ public class Miner extends Unit {
 
     private void buildFulFillmentCenter() throws GameActionException{
         if (rc.isReady() && teamSoup > RobotType.FULFILLMENT_CENTER.cost && numFulFillmentCenters < 1){
-            if(tryBuild(RobotType.FULFILLMENT_CENTER,Direction.EAST)){ //why are we building to the east?
-                System.out.println("created a fulfillment center");
+            Direction directionToHQ = myLoc.directionTo(hqLoc);
+            if(tryBuild(RobotType.FULFILLMENT_CENTER, directionToHQ.opposite())){
+            System.out.println("created a fulfillment center");
             }
         }
     }
@@ -206,8 +207,6 @@ public class Miner extends Unit {
         numDrones             = comms.numDrones;
         numLandscapers        = comms.numLandscapers;
         numMiners             = comms.numMiners;
-
-        System.out.println("I'm aware of "+numDesignSchools+" design schools");
 
     }
 }

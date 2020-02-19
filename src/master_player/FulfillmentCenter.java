@@ -19,7 +19,11 @@ public class FulfillmentCenter extends Building {
         if (turnCount % 10 ==0 && numDrones <2) {
             if (tryBuild(RobotType.DELIVERY_DRONE,Direction.SOUTH)) {
                 System.out.println("drone built");
+                comms.broadcastRobotCreation(myLoc, RobotType.DELIVERY_DRONE, rc.getTeam(), 0);
                 numDrones++;
+                if(comms.numDrones > numDrones){
+                    numDrones = comms.numDrones;
+                }
 
             }
 

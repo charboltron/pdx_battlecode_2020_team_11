@@ -23,6 +23,7 @@ public class Drone extends Unit {
         super.takeTurn();
 
         comms.broadcastRobotCreation(myLoc, rc.getType(), rc.getTeam(), 0); //only happens on creation
+        if(comms.onlyOneMessageToRead()) {comms.getMessages();}
 
         if(!checkedIfFirst){ checkIfFirstDrone();}
 
@@ -57,17 +58,20 @@ public class Drone extends Unit {
             // No close robots, so search for robots within sight radius
             nav.goTo(Util.randomDirection());
         }*/
+        comms.getMessages();
+        comms.updateRobotCounts();
     }
 
     private void checkIfFirstDrone() throws GameActionException {
         if(rc.isReady()){
 
-            comms.getMessages();
-            if(droneCount == 1){
+            System.out.println(comms.numDrones);
+            if(comms.numDrones == 1) {
                 System.out.println("I'm the first drone!");
             }else{
                 System.out.println("I'm not the first drone!");
             }
+            checkedIfFirst = true;
         }
     }
 
