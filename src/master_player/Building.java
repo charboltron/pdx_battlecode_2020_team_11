@@ -23,7 +23,7 @@ public class Building extends Robot {
 
     public void takeTurn() throws GameActionException {
         super.takeTurn();
-        comms.broadcastBuildingCreation(rc.getLocation(), rc.getType(), rc.getTeam(), 3); //only happens on creation
+        comms.broadcastRobotCreation(rc.getLocation(), rc.getType(), rc.getTeam(), 3); //only happens on creation
         //Todo Figure out how much we should bid on each building for each round
     }
 }

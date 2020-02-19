@@ -6,41 +6,51 @@ import java.util.Arrays;
 
 public class Miner extends Unit {
 
-    int numDesignSchools = 0;
-    int numRefineries = 0;
-    int numFulFillmentCenters = 0;
-    int numVaporators = 0;
-    int numNetGuns = 0;
-    int teamSoup = 0;
 
+    int numDesignSchools        = 0;
+    int numRefineries           = 0;
+    int numFulFillmentCenters   = 0;
+    int numVaporators           = 0;
+    int numNetGuns              = 0;
+    int numDrones               = 0;
+    int numLandscapers          = 0;
+    int numMiners               = 0;
+    int teamSoup                = 0;
 
     MapLocation nearestRefinery = null;
 
     ArrayList<MapLocation> soupLocations;
-    int [] buildingCounts = {0,0,0,0,0};
 
     public Miner(RobotController r) {
         super(r);
-        soupLocations = new ArrayList<MapLocation>();
     }
 
     public void takeTurn() throws GameActionException {
         super.takeTurn();
+
+        if(comms.onlyOneMessageToRead()) {comms.getMessages();}
+        updateRobotsCounts();
+
 
         if(nearestRefinery == null && hqLoc != null){
             nearestRefinery = hqLoc;
         }
 
         teamSoup = rc.getTeamSoup();
-        updateBuildingCounts();
-        comms.updateSoupLocations(soupLocations);
+        soupLocations = comms.soupLocations;
         checkIfSoupGone();
 
         Direction dir = getDirToMine();
         mine(dir);
 
+        buildDesignSchool();
+        buildRefinery();
+        buildFulFillmentCenter();
 
+        checkIfNeedToRefine();
+        updateSoupAndMove();
 
+        comms.getMessages();
 
 //        //numVaporator = 0; this shouldn't be here
 //        RobotInfo [] nearbyVaporators = rc.senseNearbyRobots();
@@ -56,11 +66,6 @@ public class Miner extends Unit {
 //            }
 //        }
 
-        buildDesignSchool();
-        buildRefinery();
-        buildFulFillmentCenter();
-        checkIfNeedToRefine();
-        updateSoupAndMove();
 
     }
 
@@ -115,15 +120,15 @@ public class Miner extends Unit {
 
     private void checkIfNeedToRefine() throws GameActionException{
         if(rc.getSoupCarrying() == RobotType.MINER.soupLimit) {
-            System.out.println("I can't mine anymore!");
+//            System.out.println("I can't mine anymore!");
             // time to go back to the HQ or find a refinery
             getNearestRefinery();
             if(nearestRefinery != null){
                 if(rc.getLocation().isAdjacentTo(nearestRefinery) && tryRefine(rc.getLocation().directionTo(nearestRefinery))) {
-                    System.out.println("I refined soup!");
+//                    System.out.println("I refined soup!");
                 }
                 else{
-                    System.out.println("Heading to nearest refinery");
+//                    System.out.println("Heading to nearest refinery");
                     nav.goTo(nearestRefinery); //will go to HQ if no other refineries
                 }
             }
@@ -158,7 +163,7 @@ public class Miner extends Unit {
 
     private void mine(Direction dir) throws  GameActionException{
         if (dir != null && tryMine(dir)) {
-            System.out.println("I mined soup! " + rc.getSoupCarrying());
+//            System.out.println("I mined soup! " + rc.getSoupCarrying());
             MapLocation soupLoc = rc.getLocation().add(dir);
             if (!soupLocations.contains(soupLoc)) {
                 comms.broadcastSoupLocation(soupLoc);
@@ -190,16 +195,19 @@ public class Miner extends Unit {
         }
     }
 
-    private void updateBuildingCounts() throws GameActionException {
-        numDesignSchools      += comms.getBuildingCount(RobotType.DESIGN_SCHOOL,        rc.getTeam());
-        numRefineries         += comms.getBuildingCount(RobotType.REFINERY,             rc.getTeam());
-        numFulFillmentCenters += comms.getBuildingCount(RobotType.FULFILLMENT_CENTER,   rc.getTeam());
-        numVaporators         += comms.getBuildingCount(RobotType.VAPORATOR,            rc.getTeam());
-        numNetGuns            += comms.getBuildingCount(RobotType.NET_GUN,            rc.getTeam());
-        buildingCounts[0] += numDesignSchools;
-        buildingCounts[1] += numRefineries;
-        buildingCounts[2] += numFulFillmentCenters;
-        buildingCounts[3] += numVaporators;
-        buildingCounts[4] += numNetGuns;
+    private void updateRobotsCounts() throws GameActionException {
+
+        comms.updateRobotCounts();
+        numDesignSchools      = comms.numDesignSchools;
+        numRefineries         = comms.numRefineries;
+        numFulFillmentCenters = comms.numFulFillmentCenters;
+        numNetGuns            = comms.numNetGuns;
+        numVaporators         = comms.numVaporators;
+        numDrones             = comms.numDrones;
+        numLandscapers        = comms.numLandscapers;
+        numMiners             = comms.numMiners;
+
+        System.out.println("I'm aware of "+numDesignSchools+" design schools");
+
     }
 }

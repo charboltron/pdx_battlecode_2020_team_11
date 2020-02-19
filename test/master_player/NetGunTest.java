@@ -321,18 +321,9 @@ public class NetGunTest {
 
         when(rcMock.getTeam()).thenReturn(Team.A);
         when(rcMock.getType()).thenReturn(RobotType.NET_GUN);
-        when(netGunMock.comms.getBuildingCount(rcMock.getType(), rcMock.getTeam())).thenReturn(1);
-
 
     }
 
-    @Test
-    public void whenHQIsCreatedItsBuildingCountIsIncremented() throws GameActionException {
-
-        int myCount = netGunMock.comms.getBuildingCount(rcMock.getType(), rcMock.getTeam());
-        assertEquals(1, myCount);
-
-    }
 
     @Test
     public void takeTurnWorksAsExpected() throws GameActionException {

@@ -325,19 +325,9 @@ public class HQTest {
 
         when(rcMock.getTeam()).thenReturn(Team.A);
         when(rcMock.getType()).thenReturn(RobotType.HQ);
-        when(hqMock.comms.getBuildingCount(rcMock.getType(), rcMock.getTeam())).thenReturn(1);
-
 
     }
 
-
-    @Test
-    public void whenHQIsCreatedItsBuildingCountIsIncremented() throws GameActionException {
-
-        int myCount = hqMock.comms.getBuildingCount(rcMock.getType(), rcMock.getTeam());
-        assertEquals(1, myCount);
-
-    }
 
     @Test
     public void takeTurnWorksAsExpected() throws GameActionException {

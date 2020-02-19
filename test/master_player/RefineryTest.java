@@ -320,17 +320,6 @@ public class RefineryTest {
 
         when(rcMock.getTeam()).thenReturn(Team.A);
         when(rcMock.getType()).thenReturn(RobotType.FULFILLMENT_CENTER);
-        when(refineryMock.comms.getBuildingCount(rcMock.getType(), rcMock.getTeam())).thenReturn(1);
-
-
-    }
-
-
-    @Test
-    public void whenRefineryIsCreatedItsBuildingCountIsIncremented() throws GameActionException {
-
-        int myCount = refineryMock.comms.getBuildingCount(rcMock.getType(), rcMock.getTeam());
-        assertEquals(1, myCount);
 
     }
 

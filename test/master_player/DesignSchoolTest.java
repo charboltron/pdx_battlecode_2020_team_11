@@ -320,19 +320,9 @@ public class DesignSchoolTest {
 
         when(rcMock.getTeam()).thenReturn(Team.A);
         when(rcMock.getType()).thenReturn(RobotType.FULFILLMENT_CENTER);
-        when(designSchoolMock.comms.getBuildingCount(rcMock.getType(), rcMock.getTeam())).thenReturn(1);
-
 
     }
 
-
-    @Test
-    public void whenHQIsCreatedItsBuildingCountIsIncremented() throws GameActionException {
-
-        int myCount = designSchoolMock.comms.getBuildingCount(rcMock.getType(), rcMock.getTeam());
-        assertEquals(1, myCount);
-
-    }
 
     @Test
     public void takeTurnWorksAsExpected() throws GameActionException {

@@ -54,7 +54,7 @@ public class Landscaper extends Unit {
 
         if (Math.random() < 0.8){ //TODO: investigate changing this random number
             // build the wall
-            if (bestPlaceToBuildWall != null) {
+            if (rc.isReady() && bestPlaceToBuildWall != null) {
                 rc.depositDirt(myLoc.directionTo(bestPlaceToBuildWall));
                 rc.setIndicatorDot(bestPlaceToBuildWall, 0, 255, 0);
                 System.out.println("building a wall");

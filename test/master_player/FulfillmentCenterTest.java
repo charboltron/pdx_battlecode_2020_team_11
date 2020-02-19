@@ -320,17 +320,6 @@ public class FulfillmentCenterTest {
 
         when(rcMock.getTeam()).thenReturn(Team.A);
         when(rcMock.getType()).thenReturn(RobotType.FULFILLMENT_CENTER);
-        when(fulfillmentCenterMock.comms.getBuildingCount(rcMock.getType(), rcMock.getTeam())).thenReturn(1);
-
-
-    }
-
-
-    @Test
-    public void whenHQIsCreatedItsBuildingCountIsIncremented() throws GameActionException {
-
-        int myCount = fulfillmentCenterMock.comms.getBuildingCount(rcMock.getType(), rcMock.getTeam());
-        assertEquals(1, myCount);
 
     }
 
