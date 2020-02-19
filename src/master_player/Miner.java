@@ -201,6 +201,5 @@ public class Miner extends Unit {
         buildingCounts[2] += numFulFillmentCenters;
         buildingCounts[3] += numVaporators;
         buildingCounts[4] += numNetGuns;
-        //Todo: Add Netgun to this. Probably could refactor this too.
     }
 }

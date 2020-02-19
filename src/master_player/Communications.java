@@ -117,8 +117,6 @@ public class Communications {
                     count += 1;
                 }
             }
-        }else{ //for testing
-            count +=1;
         }
         return count;
     }

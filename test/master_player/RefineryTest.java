@@ -1,12 +1,18 @@
 package master_player;
 
 import battlecode.common.*;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class RefineryTest {
 
+
+    RobotController rcMock;
+    Refinery refineryMock;
 
     RobotController rc = new RobotController() {
         @Override
@@ -299,21 +305,31 @@ public class RefineryTest {
 
         }
     };
-    Refinery refinery;
+    Refinery refinery = new Refinery(rc);
 
-    {
-        try {
-            refinery = new Refinery(rc);
-        } catch (GameActionException e) {
-            e.printStackTrace();
-        }
+
+    public RefineryTest() throws GameActionException {
+    }
+
+    @Before
+    public void create() throws GameActionException {
+
+        rcMock = mock(RobotController.class);
+        refineryMock = mock(Refinery.class);
+        refineryMock.comms = mock(Communications.class);
+
+        when(rcMock.getTeam()).thenReturn(Team.A);
+        when(rcMock.getType()).thenReturn(RobotType.FULFILLMENT_CENTER);
+        when(refineryMock.comms.getBuildingCount(rcMock.getType(), rcMock.getTeam())).thenReturn(1);
+
+
     }
 
 
     @Test
     public void whenRefineryIsCreatedItsBuildingCountIsIncremented() throws GameActionException {
 
-        int myCount = refinery.comms.getBuildingCount(rc.getType(), rc.getTeam());
+        int myCount = refineryMock.comms.getBuildingCount(rcMock.getType(), rcMock.getTeam());
         assertEquals(1, myCount);
 
     }

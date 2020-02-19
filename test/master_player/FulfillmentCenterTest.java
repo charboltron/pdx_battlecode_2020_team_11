@@ -1,12 +1,17 @@
 package master_player;
 
 import battlecode.common.*;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class FulfillmentCenterTest {
 
+    RobotController rcMock;
+    FulfillmentCenter fulfillmentCenterMock;
 
     RobotController rc = new RobotController() {
         @Override
@@ -299,24 +304,36 @@ public class FulfillmentCenterTest {
 
         }
     };
-    FulfillmentCenter fulfillmentCenter;
+    FulfillmentCenter fulfillmentCenter = new FulfillmentCenter(rc);
 
-    {
-        try {
-            fulfillmentCenter = new FulfillmentCenter(rc);
-        } catch (GameActionException e) {
-            e.printStackTrace();
-        }
+
+
+    public FulfillmentCenterTest() throws GameActionException {
+    }
+
+    @Before
+    public void create() throws GameActionException {
+
+        rcMock = mock(RobotController.class);
+        fulfillmentCenterMock = mock(FulfillmentCenter.class);
+        fulfillmentCenterMock.comms = mock(Communications.class);
+
+        when(rcMock.getTeam()).thenReturn(Team.A);
+        when(rcMock.getType()).thenReturn(RobotType.FULFILLMENT_CENTER);
+        when(fulfillmentCenterMock.comms.getBuildingCount(rcMock.getType(), rcMock.getTeam())).thenReturn(1);
+
+
     }
 
 
     @Test
-    public void whenFulfillmentCenterIsCreatedItsBuildingCountIsIncremented() throws GameActionException {
+    public void whenHQIsCreatedItsBuildingCountIsIncremented() throws GameActionException {
 
-        int myCount = fulfillmentCenter.comms.getBuildingCount(rc.getType(), rc.getTeam());
+        int myCount = fulfillmentCenterMock.comms.getBuildingCount(rcMock.getType(), rcMock.getTeam());
         assertEquals(1, myCount);
 
     }
+
 
     @Test
     public void takeTurnWorksAsExpected() throws GameActionException {

@@ -12,7 +12,7 @@ public class Building extends Robot {
 
     MapLocation myLoc;
 
-    public Building(RobotController r) {
+    public Building(RobotController r) throws GameActionException{
         super(r);
         myLoc = r.getLocation();
         if(myLoc != null){

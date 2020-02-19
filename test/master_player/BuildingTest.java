@@ -1,12 +1,18 @@
 package master_player;
 
 import battlecode.common.*;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class BuildingTest {
 
+
+    RobotController rcMock;
+    Building buildingMock;
 
     RobotController rc = new RobotController() {
         @Override
@@ -301,10 +307,27 @@ public class BuildingTest {
     };
     Building building = new Building(rc);
 
+    public BuildingTest() throws GameActionException {
+    }
+
+    @Before
+    public void create() throws GameActionException {
+
+        rcMock = mock(RobotController.class);
+        buildingMock = mock(Building.class);
+        buildingMock.comms = mock(Communications.class);
+
+        when(rcMock.getTeam()).thenReturn(Team.A);
+        when(rcMock.getType()).thenReturn(RobotType.HQ);
+        when(buildingMock.comms.getBuildingCount(rcMock.getType(), rcMock.getTeam())).thenReturn(1);
+
+
+    }
+
     @Test
     public void whenBuildingIsCreatedItsBuildingCountIsIncremented() throws GameActionException {
 
-        int myCount = building.comms.getBuildingCount(rc.getType(), rc.getTeam());
+        int myCount = buildingMock.comms.getBuildingCount(rcMock.getType(), rcMock.getTeam());
         assertEquals(1, myCount);
 
     }
