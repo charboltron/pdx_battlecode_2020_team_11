@@ -26,6 +26,9 @@ public class Unit extends Robot {
         if (hqLoc == null) {
             findHQ();
         }
+        myLoc = rc.getLocation();
+        myX = myLoc.x;
+        myY = myLoc.y;
     }
 
     public void findHQ() throws GameActionException {

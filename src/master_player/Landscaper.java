@@ -57,7 +57,7 @@ public class Landscaper extends Unit {
             if (rc.isReady() && bestPlaceToBuildWall != null) {
                 rc.depositDirt(myLoc.directionTo(bestPlaceToBuildWall));
                 rc.setIndicatorDot(bestPlaceToBuildWall, 0, 255, 0);
-                System.out.println("building a wall");
+//                System.out.println("building a wall");
             }
         }
 

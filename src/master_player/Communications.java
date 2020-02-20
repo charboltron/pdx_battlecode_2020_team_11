@@ -121,7 +121,7 @@ public class Communications {
         int robotCode = getRobotCode(robotType, team);
 
         if(transactionBid == 0) {
-            transactionBid = 3; //TODO this should not be hardcoded eventually
+            transactionBid = 1; //TODO this should not be hardcoded eventually
         }
         if(robotCode > 0) {
             int[] message = new int[7];
@@ -144,7 +144,7 @@ public class Communications {
     public void getMessages() throws GameActionException {
 
         int roundNum = rc.getRoundNum();
-        while (lastBroadcastRound < roundNum) {
+        while (lastBroadcastRound < roundNum && Clock.getBytecodesLeft() >= 300) {
             Transaction[] transactions = rc.getBlock(lastBroadcastRound);
             for (Transaction tx : transactions) {
                 int[] msg = tx.getMessage();
