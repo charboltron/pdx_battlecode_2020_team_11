@@ -1,17 +1,17 @@
 package master_player;
 
-import battlecode.common.Direction;
-import battlecode.common.GameActionException;
-import battlecode.common.MapLocation;
-import battlecode.common.RobotController;
+import battlecode.common.*;
 
 public class Navigation {
     RobotController rc;
+
+    MapLocation [] lastThreeSpots;
 
     // state related only to navigation should go here
 
     public Navigation(RobotController r) {
         rc = r;
+        lastThreeSpots = new MapLocation[3];
     }
     
     /**
@@ -31,14 +31,18 @@ public class Navigation {
         Direction[] toTry =
                 {
                         dir,
+                        dir.rotateRight(),
+                        dir.rotateRight().rotateRight(),
+                        dir.rotateRight().rotateRight().rotateRight(),
                         dir.rotateLeft(),
                         dir.rotateLeft().rotateLeft(),
-                        dir.rotateRight(),
-                        dir.rotateRight().rotateRight()
+                        dir.rotateLeft().rotateLeft().rotateLeft()
+
                 };
 
         for (Direction d : toTry) {
             if (rc.isReady() && rc.canMove(dir)) {
+                System.out.println("moving "+dir);
                 rc.move(d);
                 return true;
             }
@@ -59,5 +63,9 @@ public class Navigation {
     // navigate towards a particular location
     boolean goTo(MapLocation destination) throws GameActionException {
         return goTo(rc.getLocation().directionTo(destination));
+    }
+
+    boolean stuckInPosition(){
+        return lastThreeSpots[0] == lastThreeSpots[2] || lastThreeSpots [1] == lastThreeSpots [0] || lastThreeSpots[2] == lastThreeSpots[1];
     }
 }
