@@ -1,11 +1,17 @@
 package master_player;
 
 import battlecode.common.*;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class DesignSchoolTest {
+
+    RobotController rcMock;
+    DesignSchool designSchoolMock;
 
     RobotController rc = new RobotController() {
         @Override
@@ -298,24 +304,25 @@ public class DesignSchoolTest {
 
         }
     };
-    DesignSchool designSchool;
+    DesignSchool designSchool = new DesignSchool(rc);
 
-    {
-        try {
-            designSchool = new DesignSchool(rc);
-        } catch (GameActionException e) {
-            e.printStackTrace();
-        }
+
+
+    public DesignSchoolTest() throws GameActionException {
     }
 
+    @Before
+    public void create() throws GameActionException {
 
-    @Test
-    public void whenDesignSchoolIsCreatedItsBuildingCountIsIncremented() throws GameActionException {
+        rcMock = mock(RobotController.class);
+        designSchoolMock = mock(DesignSchool.class);
+        designSchoolMock.comms = mock(Communications.class);
 
-        int myCount = designSchool.comms.getBuildingCount(rc.getType(), rc.getTeam());
-        assertEquals(1, myCount);
+        when(rcMock.getTeam()).thenReturn(Team.A);
+        when(rcMock.getType()).thenReturn(RobotType.FULFILLMENT_CENTER);
 
     }
+
 
     @Test
     public void takeTurnWorksAsExpected() throws GameActionException {

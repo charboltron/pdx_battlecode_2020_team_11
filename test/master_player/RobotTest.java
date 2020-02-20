@@ -324,6 +324,5 @@ public class RobotTest {
         Robot robot = new Robot(rc);
         robot.tryBuild(RobotType.MINER, Util.randomDirection());
 
-
     }
 }

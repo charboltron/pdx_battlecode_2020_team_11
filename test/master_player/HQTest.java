@@ -1,13 +1,24 @@
 package master_player;
 
 import battlecode.common.*;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+
+import java.io.PrintStream;
 
 import static org.junit.Assert.*;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.*;
 
 public class HQTest {
 
+
+    RobotController rcMock;
+    HQ hqMock;
 
     RobotController rc = new RobotController() {
         @Override
@@ -300,31 +311,37 @@ public class HQTest {
 
         }
     };
-    HQ hq;
+    HQ hq = new HQ(rc);
 
-    {
-        try {
-            hq = new HQ(rc);
-        } catch (GameActionException e) {
-            e.printStackTrace();
-        }
+    public HQTest() throws GameActionException {
     }
 
+    @Before
+    public void create() throws GameActionException {
 
-    @Test
-    public void whenHQIsCreatedItsBuildingCountIsIncremented() throws GameActionException {
+        rcMock = mock(RobotController.class);
+        hqMock = mock(HQ.class);
+        hqMock.comms = mock(Communications.class);
 
-        int myCount = hq.comms.getBuildingCount(rc.getType(), rc.getTeam());
-        assertEquals(1, myCount);
+        when(rcMock.getTeam()).thenReturn(Team.A);
+        when(rcMock.getType()).thenReturn(RobotType.HQ);
 
     }
+
 
     @Test
     public void takeTurnWorksAsExpected() throws GameActionException {
 
+        hq.turnCount = 0;
         hq.takeTurn();
         assertEquals(1, hq.turnCount);
 
+    }
+
+    @Test
+    public void getSoupInRadiusDoesntThrowAnyErrors() throws GameActionException {
+
+        hq.getSoupInRadius();
     }
 
 }

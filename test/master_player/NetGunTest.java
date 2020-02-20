@@ -1,13 +1,18 @@
 package master_player;
 
 import battlecode.common.*;
+import org.junit.Before;
 import org.junit.Test;
 /*import sun.nio.ch.Net;*/
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class NetGunTest {
 
+    RobotController rcMock;
+    NetGun netGunMock;
 
     RobotController rc = new RobotController() {
         @Override
@@ -300,24 +305,25 @@ public class NetGunTest {
 
         }
     };
-    NetGun netGun;
+    NetGun netGun = new NetGun(rc);
 
-    {
-        try {
-            netGun = new NetGun(rc);
-        } catch (GameActionException e) {
-            e.printStackTrace();
-        }
+
+
+    public NetGunTest() throws GameActionException {
     }
 
+    @Before
+    public void create() throws GameActionException {
 
-    @Test
-    public void whenNetGunIsCreatedItsBuildingCountIsIncremented() throws GameActionException {
+        rcMock = mock(RobotController.class);
+        netGunMock = mock(NetGun.class);
+        netGunMock.comms = mock(Communications.class);
 
-        int myCount = netGun.comms.getBuildingCount(rc.getType(), rc.getTeam());
-        assertEquals(1, myCount);
+        when(rcMock.getTeam()).thenReturn(Team.A);
+        when(rcMock.getType()).thenReturn(RobotType.NET_GUN);
 
     }
+
 
     @Test
     public void takeTurnWorksAsExpected() throws GameActionException {
