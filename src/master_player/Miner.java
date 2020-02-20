@@ -98,7 +98,7 @@ public class Miner extends Unit {
         //Todo: Update navigation so miners aren't either 1) randomly moving 2) hardcoded to move in a specified way
     }
 
-    private void getNearestRefinery() {
+    void getNearestRefinery() {
         if(numRefineries > 0) {
             RobotInfo[] robots = rc.senseNearbyRobots();
             for (RobotInfo robot : robots) {
@@ -109,7 +109,7 @@ public class Miner extends Unit {
         }
     }
 
-    private void buildRefinery() throws GameActionException {
+    void buildRefinery() throws GameActionException {
         if (rc.isReady() && teamSoup > RobotType.REFINERY.cost && numRefineries < 1) {
             if (!hqLoc.isWithinDistanceSquared(rc.getLocation(), 25)
                     && !nearestRefinery.isWithinDistanceSquared(rc.getLocation(), 25)
@@ -151,7 +151,7 @@ public class Miner extends Unit {
         }
     }
 
-    private Direction getDirToMine() throws GameActionException{
+    Direction getDirToMine() throws GameActionException{
         MapLocation myLoc = rc.getLocation();
         for (Direction dir : Util.directions) {
             MapLocation newLoc = myLoc.add(dir);
@@ -209,4 +209,6 @@ public class Miner extends Unit {
         numMiners             = comms.numMiners;
 
     }
+
+
 }
