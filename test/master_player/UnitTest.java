@@ -28,7 +28,7 @@ public class UnitTest {
 
         @Test
         public void findHQ() throws GameActionException {
-            when(rcMock.senseNearbyRobots()).thenReturn(new RobotInfo[]{new RobotInfo(12, Team.A, RobotType.HQ, 0, false, 0, 0, 0, new MapLocation(5, 5))});
+            when(rcMock.senseNearbyRobots()).thenReturn(new RobotInfo[]{new RobotInfo(1, Team.A, RobotType.HQ, 0, false, 0, 0, 0, new MapLocation(5, 5))});
             unitMock.findHQ();
             verify(rcMock).senseNearbyRobots();
             verify(rcMock).getTeam();
