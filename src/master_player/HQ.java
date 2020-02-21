@@ -11,14 +11,19 @@ public class HQ extends Shooter {
     Direction dirToNearestSoup;
     ArrayList<MapLocation> nearbySoupSpots;
 
+    boolean haveCircleDrone;
+
     public HQ(RobotController r) throws GameActionException {
         super(r);
         nearbySoupSpots = new ArrayList<MapLocation>();
+        haveCircleDrone = false;
 
     }
 
     public void takeTurn() throws GameActionException {
         super.takeTurn();
+
+        checkCircleDrone();
 
         if (rc.getRoundNum() == 1) {
             getSoupInRadius();
@@ -42,6 +47,19 @@ public class HQ extends Shooter {
                         rc.shootUnit(e.ID);
                         break;
                     }
+                }
+            }
+        }
+    }
+
+    private void checkCircleDrone() throws GameActionException {
+        if(haveCircleDrone)return;
+            else {
+            RobotInfo[] nearbyRobots = rc.senseNearbyRobots();
+            for (RobotInfo r : nearbyRobots) {
+                if (r.type == RobotType.DELIVERY_DRONE && r.getTeam() == rc.getTeam()) {
+                    comms.broadcastNeedSentinelDrone(r.getID());
+                    haveCircleDrone = true;
                 }
             }
         }
