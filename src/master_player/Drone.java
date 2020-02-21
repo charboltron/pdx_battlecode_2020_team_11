@@ -32,10 +32,11 @@ public class Drone extends Unit {
 
         if(!checkedIfFirst){ checkIfFirstDrone();}
         firstDroneCircleHQ();
-        if(!firstDrone){
-            nav.goTo(Util.randomDirection());
-        }
-
+//        if(!firstDrone){
+//            nav.goTo(Util.randomDirection());
+//        }
+//
+//        OtherDroneActions();
 
 //        Team enemy = rc.getTeam().opponent();
 //        RobotInfo[] enemiesInRange = rc.senseNearbyRobots(GameConstants.NET_GUN_SHOOT_RADIUS_SQUARED, enemy);
@@ -73,6 +74,14 @@ public class Drone extends Unit {
         comms.updateRobotCounts();
     }
 
+//    private void otherDroneActions() throws GameActionException {
+//        if(!rc.isReady() || firstDrone) return;
+//            //Todo: make movement for other drones.
+//        nav.droneMove(Util.randomDirection());
+//
+//
+//    }
+
     private void checkIfFirstDrone() throws GameActionException {
         if(rc.isReady()){
 
@@ -99,65 +108,65 @@ public class Drone extends Unit {
             Direction directionToHQ = myLoc.directionTo(hqLoc);
             System.out.println("D to HQ: "+directionToHQ);
             if(distanceToHq > 30){
-                nav.droneMove(directionToHQ);
+                nav.firstDroneMove(directionToHQ);
             }else if(distanceToHq < 15){
-                nav.droneMove(directionToHQ.opposite());
+                nav.firstDroneMove(directionToHQ.opposite());
             }
             else {
                 switch (directionToHQ) {
                     case SOUTH:
-                        if(distanceToHq < 25){
-                            nav.droneMove(Direction.NORTHWEST);
+                        if(distanceToHq < 20){
+                            nav.firstDroneMove(Direction.NORTHWEST);
                         }
-                        nav.droneMove(Direction.WEST);
+                        nav.firstDroneMove(Direction.WEST);
                     case SOUTHEAST:
-                        if(distanceToHq < 25){
-                            nav.droneMove(Direction.WEST);
+                        if(distanceToHq < 20){
+                            nav.firstDroneMove(Direction.WEST);
                         }
                         else {
-                            nav.droneMove(Direction.SOUTH);
+                            nav.firstDroneMove(Direction.SOUTH);
                         }
                     case EAST:
-                        if(distanceToHq < 25){
-                            nav.droneMove(Direction.SOUTHWEST);
+                        if(distanceToHq < 20){
+                            nav.firstDroneMove(Direction.SOUTHWEST);
                         }
                         else {
-                            nav.droneMove(Direction.SOUTH);
+                            nav.firstDroneMove(Direction.SOUTH);
                         }
                     case NORTHEAST:
-                        if(distanceToHq < 25){
-                            nav.droneMove(Direction.SOUTH);
+                        if(distanceToHq < 20){
+                            nav.firstDroneMove(Direction.SOUTH);
                         }
                         else {
-                            nav.droneMove(Direction.EAST);
+                            nav.firstDroneMove(Direction.EAST);
                         }
                     case NORTH:
-                        if(distanceToHq < 25){
-                            nav.droneMove(Direction.SOUTHEAST);
+                        if(distanceToHq < 20){
+                            nav.firstDroneMove(Direction.SOUTHEAST);
                         }
                         else {
-                            nav.droneMove(Direction.EAST);
+                            nav.firstDroneMove(Direction.EAST);
                         }
                     case NORTHWEST:
-                        if(distanceToHq < 25){
-                            nav.droneMove(Direction.EAST);
+                        if(distanceToHq < 20){
+                            nav.firstDroneMove(Direction.EAST);
                         }
                         else {
-                            nav.droneMove(Direction.NORTH);
+                            nav.firstDroneMove(Direction.NORTH);
                         }
                     case WEST:
-                        if(distanceToHq < 25){
-                            nav.droneMove(Direction.NORTHEAST);
+                        if(distanceToHq < 20){
+                            nav.firstDroneMove(Direction.NORTHEAST);
                         }
                         else {
-                            nav.droneMove(Direction.NORTH);
+                            nav.firstDroneMove(Direction.NORTH);
                         }
                     case SOUTHWEST:
-                        if(distanceToHq < 25){
-                            nav.droneMove(Direction.NORTH);
+                        if(distanceToHq < 20){
+                            nav.firstDroneMove(Direction.NORTH);
                         }
                         else {
-                            nav.droneMove(Direction.WEST);
+                            nav.firstDroneMove(Direction.WEST);
                         }
                 }
             }
