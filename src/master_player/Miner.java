@@ -57,12 +57,14 @@ public class Miner extends Unit {
         comms.getMessages();
     }
 
-    private void buildVaporator() throws GameActionException {
+    public boolean buildVaporator() throws GameActionException {
         if (numLandscapers > 5 && rc.getTeamSoup() > 500 && rc.getRoundNum() > 300 && numVaporators < 3) {
             if (tryBuild(RobotType.VAPORATOR, Util.randomDirection())) {
                 System.out.println("Teamsoup: " + rc.getTeamSoup() + ", RoundNum: " + rc.getRoundNum() + " build a Vaporator");
+                return true;
             }
         }
+        return false;
     }
 
 //        RobotInfo [] nearbyVaporators = rc.senseNearbyRobots();
@@ -71,7 +73,7 @@ public class Miner extends Unit {
 //            }
 //        }
 
-    private void getNearestRefinery() {
+    public void getNearestRefinery() {
         if(numRefineries > 0) {
             RobotInfo[] robots = rc.senseNearbyRobots();
             for (RobotInfo robot : robots) {
@@ -82,13 +84,16 @@ public class Miner extends Unit {
         }
     }
 
-    private void buildRefinery() throws GameActionException {
+    public boolean buildRefinery() throws GameActionException {
         if (rc.isReady() && teamSoup > RobotType.REFINERY.cost && numRefineries < 1) {
             if (!hqLoc.isWithinDistanceSquared(rc.getLocation(), 30)
                     && !nearestRefinery.isWithinDistanceSquared(rc.getLocation(), 25)
-                    && tryBuild(RobotType.REFINERY, Util.randomDirection()))
+                    && tryBuild(RobotType.REFINERY, Util.randomDirection())) {
                 System.out.println("created a refinery");
+                return true;
+            }
         }
+        return false;
     }
 
     private void checkIfNeedToRefine() throws GameActionException{
@@ -109,38 +114,43 @@ public class Miner extends Unit {
         }
     }
 
-    private void buildDesignSchool() throws GameActionException{
+    public boolean buildDesignSchool() throws GameActionException{
         if (rc.getRoundNum() > 200 && rc.isReady() && teamSoup > RobotType.DESIGN_SCHOOL.cost && numDesignSchools < 3){
-            if(!hqLoc.isWithinDistanceSquared(rc.getLocation(), 8) && tryBuild(RobotType.DESIGN_SCHOOL, Util.randomDirection()))
+            if(!hqLoc.isWithinDistanceSquared(rc.getLocation(), 8) && tryBuild(RobotType.DESIGN_SCHOOL, Util.randomDirection())) {
                 System.out.println("created a design school");
+                return true;
+            }
         }
+        return false;
     }
 
-    private void buildFulFillmentCenter() throws GameActionException{
+    public boolean buildFulFillmentCenter() throws GameActionException{
         if (rc.getRoundNum() > 300 && rc.isReady() && numDesignSchools > 1 && teamSoup > RobotType.FULFILLMENT_CENTER.cost && numFulFillmentCenters < 1){
             Direction directionToHQ = myLoc.directionTo(hqLoc);
             if(tryBuild(RobotType.FULFILLMENT_CENTER, directionToHQ.opposite())){
             System.out.println("created a fulfillment center");
+            return true;
             }
         }
+        return false;
     }
 
-    private void buildNetgun() throws GameActionException {
+    public boolean buildNetgun() throws GameActionException {
         if (rc.isReady() && numNetGuns < 2 && teamSoup > RobotType.NET_GUN.cost) {
             RobotInfo[] robots = rc.senseNearbyRobots(24);
             for (RobotInfo robot : robots) {
                 if (robot.type == RobotType.REFINERY && robot.team == rc.getTeam()) {
                     if(tryBuild(RobotType.NET_GUN, Util.randomDirection())) {
                         System.out.println("created a net gun near Refinery");
-                        break;
+                        return true;
                     }
                 }
             }
         }
+        return false;
     }
 
-    private Direction getDirToMine() throws GameActionException{
-
+    public Direction getDirToMine() throws GameActionException {
         MapLocation myLoc = rc.getLocation();
         for (Direction dir : Util.directions) {
             MapLocation newLoc = myLoc.add(dir);
@@ -167,7 +177,7 @@ public class Miner extends Unit {
         return false;
     }
 
-    private void updateSoupAndMove() throws GameActionException{
+    void updateSoupAndMove() throws GameActionException{
 
         if(!rc.isReady()){return;}
         if(soupLocations.size() == 0){
@@ -212,7 +222,6 @@ public class Miner extends Unit {
     }
 
     void checkIfSoupGone() throws GameActionException {
-
         if (soupLocations.size() > 0 && soupLocations.contains(nearestSoup)) {
             if (rc.canSenseLocation(nearestSoup)
                     && rc.senseSoup(nearestSoup) == 0) {
