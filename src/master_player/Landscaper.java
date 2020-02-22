@@ -52,12 +52,12 @@ public class Landscaper extends Unit {
         }
 
 
-        if (Math.random() < 0.8){ //TODO: investigate changing this random number
+        if (Math.random() < 0.75){ //TODO: investigate changing this random number
             // build the wall
             if (rc.isReady() && bestPlaceToBuildWall != null) {
                 rc.depositDirt(myLoc.directionTo(bestPlaceToBuildWall));
                 rc.setIndicatorDot(bestPlaceToBuildWall, 0, 255, 0);
-//                System.out.println("building a wall");
+                System.out.println("building a wall");
             }
         }
 
