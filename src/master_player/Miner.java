@@ -47,12 +47,12 @@ public class Miner extends Unit {
         tryMine(dir);
 
         buildDesignSchool();
-        buildRefinery();
+        //buildRefinery();
         buildFulFillmentCenter();
         buildVaporator();
-
         checkIfNeedToRefine();
         updateSoupAndMove();
+        buildNetgun();
 
         comms.getMessages();
     }
@@ -110,17 +110,31 @@ public class Miner extends Unit {
     }
 
     private void buildDesignSchool() throws GameActionException{
-        if (rc.isReady() && teamSoup > RobotType.DESIGN_SCHOOL.cost && numDesignSchools < 3){
+        if (rc.getRoundNum() > 200 && rc.isReady() && teamSoup > RobotType.DESIGN_SCHOOL.cost && numDesignSchools < 3){
             if(!hqLoc.isWithinDistanceSquared(rc.getLocation(), 8) && tryBuild(RobotType.DESIGN_SCHOOL, Util.randomDirection()))
                 System.out.println("created a design school");
         }
     }
 
     private void buildFulFillmentCenter() throws GameActionException{
-        if (rc.isReady() && numDesignSchools > 1 && teamSoup > RobotType.FULFILLMENT_CENTER.cost && numFulFillmentCenters < 1){
+        if (rc.getRoundNum() > 300 && rc.isReady() && numDesignSchools > 1 && teamSoup > RobotType.FULFILLMENT_CENTER.cost && numFulFillmentCenters < 1){
             Direction directionToHQ = myLoc.directionTo(hqLoc);
             if(tryBuild(RobotType.FULFILLMENT_CENTER, directionToHQ.opposite())){
             System.out.println("created a fulfillment center");
+            }
+        }
+    }
+
+    private void buildNetgun() throws GameActionException {
+        if (rc.isReady() && numNetGuns < 2 && teamSoup > RobotType.NET_GUN.cost) {
+            RobotInfo[] robots = rc.senseNearbyRobots(24);
+            for (RobotInfo robot : robots) {
+                if (robot.type == RobotType.REFINERY && robot.team == rc.getTeam()) {
+                    if(tryBuild(RobotType.NET_GUN, Util.randomDirection())) {
+                        System.out.println("created a net gun near Refinery");
+                        break;
+                    }
+                }
             }
         }
     }
@@ -160,7 +174,7 @@ public class Miner extends Unit {
             soupLocations.addAll(Arrays.asList(rc.senseNearbySoup()));
         }
         if (soupLocations.size() > 0){
-
+            buildRefinery();
             for(MapLocation soupLocation: soupLocations) {
                 if(nearestSoup == null || soupLocation.distanceSquaredTo(myLoc) < nearestSoup.distanceSquaredTo(myLoc)){
                     nearestSoup = soupLocation;
