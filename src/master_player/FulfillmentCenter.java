@@ -15,8 +15,9 @@ public class FulfillmentCenter extends Building {
     public void takeTurn() throws GameActionException {
         super.takeTurn();
 
+        if(comms.onlyOneMessageToRead()){comms.getMessages();}
 
-        if (turnCount % 10 ==0 && numDrones <2) {
+        if (turnCount % 10 ==0 && numDrones < 3) {
             if (tryBuild(RobotType.DELIVERY_DRONE,Direction.SOUTH)) {
                 System.out.println("drone built");
                 comms.broadcastRobotCreation(myLoc, RobotType.DELIVERY_DRONE, rc.getTeam(), 0);
@@ -28,5 +29,6 @@ public class FulfillmentCenter extends Building {
             }
 
         }
+        comms.getMessages();
     }
 }

@@ -17,10 +17,18 @@ public class Communications {
     int numMiners               = 0;
     int teamSoup                = 0;
 
+    boolean hqOffLimits;
+    int sentinelDrone;
+
     ArrayList<MapLocation> soupLocations;
 
-    static final int ROBOT_INFORMATION = 1;
-    static final int SOUP_LOCATION  = 2;
+    static final int ROBOT_INFORMATION  = 1;
+    static final int SOUP_LOCATION      = 2;
+    static final int HQ_OFF_LIMITS      = 3;
+    static final int FOUND_SENTINEL_DRONE = 4;
+
+
+
     RobotController rc;
     int lastBroadcastRound = 1;
     int[] robotCounts;
@@ -62,6 +70,7 @@ public class Communications {
         rc = r;
         robotCounts = new int[8];
         soupLocations = new ArrayList<MapLocation>();
+        hqOffLimits = false;
     }
 
     boolean onlyOneMessageToRead(){
@@ -171,6 +180,14 @@ public class Communications {
                         }
                         break;
                     }
+                    case HQ_OFF_LIMITS:{
+                        hqOffLimits = true;
+                        break;
+                    }
+                    case FOUND_SENTINEL_DRONE:{
+                        sentinelDrone = msg[5];
+                        break;
+                    }
                 }
             } lastBroadcastRound++;
         }
@@ -204,6 +221,20 @@ public class Communications {
         soupLocations.add(loc);
     }
 
+    public void broadcastHQOffLimits() throws GameActionException{
+        if(hqOffLimits){return;}
+        int[] message = new int[7];
+        message[0] = teamSecret1;
+        message[2] = 0; // x coord of HQ
+        message[3] = 0; // y coord of HQ
+        message[4] = HQ_OFF_LIMITS;
+        message[6] = teamSecret2;
+        if (rc.canSubmitTransaction(message, 3)) {
+            rc.submitTransaction(message, 3);
+            System.out.println("broadcasting HQ off limits!");
+        }
+    }
+
     public void updateRobotCounts() {
         numDesignSchools      = robotCounts[0];
         numRefineries         = robotCounts[1];
@@ -214,5 +245,20 @@ public class Communications {
         numLandscapers        = robotCounts[6];
         numMiners             = robotCounts[7];
 
+    }
+
+
+    public void broadcastNeedSentinelDrone(int id) throws GameActionException {
+        int[] message = new int[7];
+        message[0] = teamSecret1;
+        message[2] = 0; // x coord of HQ
+        message[3] = 0; // y coord of HQ
+        message[5] = id;
+        message[4] = FOUND_SENTINEL_DRONE;
+        message[6] = teamSecret2;
+        if (rc.canSubmitTransaction(message, 3)) {
+            rc.submitTransaction(message, 3);
+            System.out.println("broadcasting HQ off limits!");
+        }
     }
 }

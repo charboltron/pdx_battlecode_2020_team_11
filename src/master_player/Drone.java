@@ -25,18 +25,19 @@ public class Drone extends Unit {
 
         int r = rc.getRoundNum();
         nav.lastThreeSpots[r%3] = myLoc;
+//        if(nav.stuckInPosition()){nav.goTo((Util.randomDirection()));}
 
         myLoc = rc.getLocation();
         comms.broadcastRobotCreation(myLoc, rc.getType(), rc.getTeam(), 0); //only happens on creation
         if(comms.onlyOneMessageToRead()) {comms.getMessages();}
 
-        if(!checkedIfFirst){ checkIfFirstDrone();}
+        if(!checkedIfFirst){checkIfFirstDrone();}
+
+        scoutSoup();
         firstDroneCircleHQ();
-//        if(!firstDrone){
-//            nav.goTo(Util.randomDirection());
-//        }
-//
-//        OtherDroneActions();
+        if(!firstDrone){
+            otherDroneActions();
+        }
 
 //        Team enemy = rc.getTeam().opponent();
 //        RobotInfo[] enemiesInRange = rc.senseNearbyRobots(GameConstants.NET_GUN_SHOOT_RADIUS_SQUARED, enemy);
@@ -74,19 +75,30 @@ public class Drone extends Unit {
         comms.updateRobotCounts();
     }
 
-//    private void otherDroneActions() throws GameActionException {
-//        if(!rc.isReady() || firstDrone) return;
-//            //Todo: make movement for other drones.
-//        nav.droneMove(Util.randomDirection());
-//
-//
-//    }
+    private void scoutSoup() throws GameActionException {
+        if(!rc.isReady()){return;}
+        for (Direction dir : Util.directions) {
+            MapLocation newLoc = myLoc.add(dir);
+            if (rc.canSenseLocation(newLoc) && rc.senseSoup(newLoc) > 0) {
+                System.out.println("I spot soup: " + dir);
+                comms.broadcastSoupLocation(newLoc);
+            }
+        }
+    }
+
+    private void otherDroneActions() throws GameActionException {
+        if(!rc.isReady() || firstDrone) return;
+            //Todo: make movement for other drones.
+        nav.droneMove(Util.randomDirection());
+
+
+    }
 
     private void checkIfFirstDrone() throws GameActionException {
         if(rc.isReady()){
 
             System.out.println(comms.numDrones);
-            if(comms.numDrones == 1) {
+            if(comms.sentinelDrone == rc.getID()){
                 System.out.println("I'm the first drone!");
                 firstDrone = true;
             }else{
