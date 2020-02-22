@@ -36,20 +36,20 @@ public class HQ extends Shooter {
                 }
         }
         // shoot nearby enemies
-        if (rc.getTeam() != null) {
-
-            Team enemy = rc.getTeam().opponent();
-            RobotInfo[] enemiesInRange = rc.senseNearbyRobots(GameConstants.NET_GUN_SHOOT_RADIUS_SQUARED, enemy);
-
-            for (RobotInfo e : enemiesInRange) {
-                if (e.type == RobotType.DELIVERY_DRONE) {
-                    if (rc.canShootUnit(e.ID)) {
-                        rc.shootUnit(e.ID);
-                        break;
-                    }
-                }
-            }
-        }
+//        if (rc.getTeam() != null) {
+//
+//            Team enemy = rc.getTeam().opponent();
+//            RobotInfo[] enemiesInRange = rc.senseNearbyRobots(GameConstants.NET_GUN_SHOOT_RADIUS_SQUARED, enemy);
+//
+//            for (RobotInfo e : enemiesInRange) {
+//                if (e.type == RobotType.DELIVERY_DRONE) {
+//                    if (rc.canShootUnit(e.ID)) {
+//                        rc.shootUnit(e.ID);
+//                        break;
+//                    }
+//                }
+//            }
+//        }
     }
 
     private void checkCircleDrone() throws GameActionException {

@@ -327,7 +327,6 @@ public class NetGunTest {
 
     @Test
     public void takeTurnWorksAsExpected() throws GameActionException {
-
         netGun.takeTurn();
         assertEquals(1, netGun.turnCount);
 
