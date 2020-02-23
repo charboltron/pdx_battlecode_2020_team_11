@@ -44,5 +44,25 @@ public class NavigationTest {
         assertEquals(true, result);
     }
 
+    @Test
+    public void firstDroneMove() throws GameActionException{
+        boolean result = navMock.firstDroneMove(Direction.CENTER);
+        assertEquals(true, result);
+
+    }
+
+    @Test
+    public void goToLoc() throws GameActionException{
+        boolean result = navMock.goTo(new MapLocation(5,6));
+        // not sure why its false...
+        assertEquals(false, result);
+    }
+
+    @Test
+    public void stuckInPos() throws GameActionException{
+        boolean result = navMock.stuckInPosition();
+        assertEquals(true, result);
+    }
+
 
 }

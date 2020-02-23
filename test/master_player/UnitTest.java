@@ -27,6 +27,17 @@ public class UnitTest {
         }
 
         @Test
+        public void takeTurn() throws GameActionException{
+            when(rcMock.senseNearbyRobots()).thenReturn(new RobotInfo[]{new RobotInfo(1, Team.A, RobotType.HQ, 0, false, 0, 0, 0, new MapLocation(5, 5))});
+            when(rcMock.getLocation()).thenReturn(new MapLocation(5,5));
+            unitMock.takeTurn();
+            verify(rcMock).senseNearbyRobots();
+            verify(rcMock).senseNearbyRobots();
+            verify(rcMock).getLocation();
+
+        }
+
+        @Test
         public void findHQ() throws GameActionException {
             when(rcMock.senseNearbyRobots()).thenReturn(new RobotInfo[]{new RobotInfo(1, Team.A, RobotType.HQ, 0, false, 0, 0, 0, new MapLocation(5, 5))});
             unitMock.findHQ();

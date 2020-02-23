@@ -82,7 +82,7 @@ public class Miner extends Unit {
 //            }
 //        }
 
-    private void getNearestRefinery() {
+    void getNearestRefinery() {
         if(numRefineries > 0) {
             RobotInfo[] robots = rc.senseNearbyRobots();
             for (RobotInfo robot : robots) {
