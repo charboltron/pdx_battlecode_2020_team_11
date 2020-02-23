@@ -82,7 +82,7 @@ public class Miner extends Unit {
 //            }
 //        }
 
-    private void getNearestRefinery() {
+    void getNearestRefinery() {
         if(numRefineries > 0) {
             RobotInfo[] robots = rc.senseNearbyRobots();
             for (RobotInfo robot : robots) {
@@ -242,7 +242,6 @@ public class Miner extends Unit {
     }
 
     void checkIfSoupGone() throws GameActionException {
-
         if (soupLocations.size() > 0 && soupLocations.contains(nearestSoup)) {
             if (rc.canSenseLocation(nearestSoup)
                     && rc.senseSoup(nearestSoup) == 0) {
@@ -252,7 +251,7 @@ public class Miner extends Unit {
         }
     }
 
-    private void updateRobotsCounts() throws GameActionException {
+    public String updateRobotsCounts() throws GameActionException {
 
         comms.updateRobotCounts();
         numDesignSchools      = comms.numDesignSchools;
@@ -267,6 +266,6 @@ public class Miner extends Unit {
         hqOffLimits = comms.hqOffLimits;
 
         System.out.println("num refineries "+numRefineries);
-
+        return "updated robot counts";
     }
 }

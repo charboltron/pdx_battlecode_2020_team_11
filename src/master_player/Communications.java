@@ -235,7 +235,7 @@ public class Communications {
         }
     }
 
-    public void updateRobotCounts() {
+    public String updateRobotCounts() {
         numDesignSchools      = robotCounts[0];
         numRefineries         = robotCounts[1];
         numFulFillmentCenters = robotCounts[2];
@@ -244,7 +244,7 @@ public class Communications {
         numDrones             = robotCounts[5];
         numLandscapers        = robotCounts[6];
         numMiners             = robotCounts[7];
-
+        return "updated Robot Counts";
     }
 
 

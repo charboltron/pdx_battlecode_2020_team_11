@@ -1,12 +1,13 @@
 package master_player;
-
 import battlecode.common.*;
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-public class RobotTest {
-
+public class VaporatorTest {
     RobotController rc = new RobotController() {
         @Override
         public int getRoundNum() {
@@ -299,30 +300,16 @@ public class RobotTest {
         }
     };
 
+    Vaporator vaporator = new Vaporator(rc);
 
-    @Test
-    public void newlyCreatedRobotHasInitialTurnCountOfZero() {
-
-        Robot robot = new Robot(rc);
-        assertEquals(0, robot.turnCount);
+    public VaporatorTest() throws GameActionException {
     }
 
     @Test
-    public void takingTurnIncrementsTurnCount() throws GameActionException{
+    public void takeTurnWorksAsExpected() throws GameActionException {
 
-        Robot robot = new Robot(rc);
-        robot.takeTurn();
-        assertEquals(1, robot.turnCount);
-        robot.takeTurn();
-        assertEquals(2, robot.turnCount);
-
-    }
-
-    @Test
-    public void successfulBuildBuildingReturnsTrue() throws GameActionException {
-        Robot robot = new Robot(rc);
-        boolean result = robot.tryBuild(RobotType.MINER, Util.randomDirection());
-        assertEquals(result, false);
+        vaporator.takeTurn();
+        assertEquals(1, vaporator.turnCount);
 
     }
 }
