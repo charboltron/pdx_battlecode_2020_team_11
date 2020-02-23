@@ -47,6 +47,20 @@ public class MinerTest {
         boolean result = minerMock.tryMine(Direction.CENTER);
         assertTrue(result);
     }
+
+    @Test
+    public void tryMineDirNull() throws GameActionException{
+        when(rcMock.isReady()).thenReturn(true);
+//        when(rcMock.canMineSoup(null)).thenReturn(false);
+        boolean result = minerMock.tryMine(null);
+        assertFalse(result);
+    }
+
+    @Test
+    public void updateRobotCounts() throws GameActionException{
+        String result = minerMock.updateRobotsCounts();
+        assertEquals("updated robot counts", result);
+    }
 //    @Test
 //    public void getNearestRefinery(){
 //        when(rcMock.senseNearbyRobots()).thenReturn(new RobotInfo[]{new RobotInfo(1,Team.A,RobotType.REFINERY,0,false,0,0,0, new MapLocation(1,1))});
