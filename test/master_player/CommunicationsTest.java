@@ -1,46 +1,51 @@
-//package master_player;
-//
-//import battlecode.common.GameActionException;
-//import battlecode.common.RobotController;
-//import battlecode.common.RobotType;
-//import battlecode.common.Team;
-//import org.junit.Before;
-//import org.junit.Test;
-//import sun.security.krb5.internal.crypto.Des;
-//
-//import static org.junit.Assert.*;
-//import static org.mockito.Mockito.mock;
-//import static org.mockito.Mockito.when;
-//
-//public class CommunicationsTest {
-//
-//
-//    RobotController rcMock;
-//    FulfillmentCenter fulfillmentCenter;
-//    Communications commsMock;
-//
-//
-//    @Before
-//    public void create() throws GameActionException {
-//
-//        rcMock = mock(RobotController.class);
-//        commsMock  = mock(Communications.class);
-//
-//        when(rcMock.getTeam()).thenReturn(Team.A);
-//        when(rcMock.getType()).thenReturn(RobotType.HQ);
+package master_player;
+
+import battlecode.common.GameActionException;
+import battlecode.common.RobotController;
+import battlecode.common.RobotType;
+import battlecode.common.Team;
+import org.junit.Before;
+import org.junit.Rule;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
+
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+public class CommunicationsTest {
+
+
+    @Rule
+    public MockitoRule mockitoRule = MockitoJUnit.rule();
+    @Mock
+    RobotController rcMock = mock(RobotController.class);
+    @InjectMocks
+    Communications commsMock = new Communications(rcMock);
+
+
+    @Before
+    public void create() throws GameActionException {
+        when(rcMock.getTeam()).thenReturn(Team.A);
+        when(rcMock.getType()).thenReturn(RobotType.HQ);
 //        when(rcMock.buildRobot(RobotType.FULFILLMENT_CENTER)).thenCallRealMethod();
-//
-//    }
-//
-//
+
+    }
+
+    @Test
+    public void updateRobotCounts() throws GameActionException{
+        String result = commsMock.updateRobotCounts();
+        assertEquals("updated Robot Counts", result);
+    }
+
 //    @Test
 //    public void whenFulFillmentCenterIsCreatedItsBuildingCountIsIncremented() throws GameActionException {
-//
-//        assertEquals(1, commsMock.numFulFillmentCenters);
-//
-//
+//        assertEquals(0, commsMock.numFulFillmentCenters);
 //    }
-//
+
 
 //    @Test
 //    public void whenDesignSchoolIsCreatedItsBuildingCountIsIncremented() throws GameActionException {
@@ -74,6 +79,6 @@
 //        assertEquals(1, myCount);
 //
 //    }
-//
-//
-//}
+}
+
+
