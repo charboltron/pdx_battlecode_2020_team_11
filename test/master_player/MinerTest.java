@@ -41,9 +41,6 @@ public class MinerTest {
         soupLocations.add(nearestSoup);
     }
 
-    public void MinerTest() throws GameActionException {
-    }
-
     @Test
     public void tryRefine() throws GameActionException {
         when(rcMock.isReady()).thenReturn(true);
