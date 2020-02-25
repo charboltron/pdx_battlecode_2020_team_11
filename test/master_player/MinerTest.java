@@ -6,10 +6,14 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Spy;
+import org.mockito.invocation.InvocationOnMock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+import org.mockito.stubbing.Answer;
 
 
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -23,12 +27,21 @@ public class MinerTest {
     public MockitoRule mockitoRule = MockitoJUnit.rule();
     @Mock
     RobotController rcMock = mock(RobotController.class);
+    @Spy
+    ArrayList<MapLocation> soupLocations;
+    MapLocation nearestSoup;
     @InjectMocks
     Miner minerMock = new Miner(rcMock);
+
     @Before
     public void setup() {
         when(rcMock.getTeam()).thenReturn(Team.A);
         when(rcMock.getType()).thenReturn(RobotType.HQ);
+        nearestSoup = new MapLocation(6,6);
+        soupLocations.add(nearestSoup);
+    }
+
+    public void MinerTest() throws GameActionException {
     }
 
     @Test
@@ -61,25 +74,26 @@ public class MinerTest {
         String result = minerMock.updateRobotsCounts();
         assertEquals("updated robot counts", result);
     }
-//    @Test
-//    public void getNearestRefinery(){
-//        when(rcMock.senseNearbyRobots()).thenReturn(new RobotInfo[]{new RobotInfo(1,Team.A,RobotType.REFINERY,0,false,0,0,0, new MapLocation(1,1))});
-//        minerMock.getNearestRefinery();
-//        verify(rcMock).senseNearbyRobots();
-//        verify(rcMock).getTeam();
-//    }
+    @Test
+    public void getNearestRefinery(){
+        minerMock.numRefineries = 1;
+        when(rcMock.senseNearbyRobots()).thenReturn(new RobotInfo[]{new RobotInfo(1,Team.A,RobotType.REFINERY,0,false,0,0,0, new MapLocation(1,1))});
+        minerMock.getNearestRefinery();
+        verify(rcMock).senseNearbyRobots();
+        verify(rcMock).getTeam();
+    }
+
 //    @Test
 //    public void buildRefinery() throws GameActionException{
+//        minerMock.teamSoup = 500;
+//        minerMock.numRefineries = 1;
 //        when(rcMock.isReady()).thenReturn(true);
-//        when(!minerMock.hqLoc.isWithinDistanceSquared(rcMock.getLocation(), 30)).thenReturn(true);
+//        when(hqLoc.isWithinDistanceSquared(rcMock.getLocation(), 30)).thenReturn(true);
 //        when(!minerMock.nearestRefinery.isWithinDistanceSquared(rcMock.getLocation(), 25)).thenReturn(true);
 //        when(minerMock.tryBuild(RobotType.REFINERY, Util.randomDirection())).thenReturn(true);
-//        when(minerMock.teamSoup).thenReturn(500);
-//        when(minerMock.numRefineries).thenReturn(0);
-//        boolean result = minerMock.buildRefinery();
-//        assertTrue(result);
-//
+//        minerMock.buildRefinery();
 //    }
+
     @Test
     public void getDirToMine() throws GameActionException {
         when(rcMock.getLocation()).thenReturn(new MapLocation(6, 6));
@@ -91,19 +105,40 @@ public class MinerTest {
         verify(rcMock).canSenseLocation(new MapLocation(6, 7));
     }
 
-//    @Test
-//    public void checkIfSoupGone() throws GameActionException{
-//        MapLocation soupLocation = new MapLocation(6,6);
-//        when(minerMock.soupLocations.size()).thenReturn(1);
-//        when(minerMock.soupLocations.contains(soupLocation)).thenReturn(true);
-//        when(rcMock.canSenseLocation(soupLocation)).thenReturn(true);
-//        when(rcMock.senseSoup(soupLocation)).thenReturn(0);
-//        when(minerMock.soupLocations.remove(soupLocation)).thenReturn(true);
-//        minerMock.checkIfSoupGone();
-//        verify(rcMock).senseSoup(soupLocation);
-//        verify(rcMock).canSenseLocation(soupLocation);
-//
-//    }
+    @Test
+    public void checkIfSoupGone() throws GameActionException{
+        minerMock.nearestSoup = new MapLocation(6,6);
+        when(soupLocations.size()).thenReturn(1);
+        when(soupLocations.contains(nearestSoup)).thenReturn(true);
+        when(rcMock.canSenseLocation(new MapLocation(6, 6))).thenReturn(true);
+        when(rcMock.senseSoup(new MapLocation(6,6))).thenReturn(0);
+        when(soupLocations.remove(nearestSoup)).thenReturn(true);
+        minerMock.checkIfSoupGone();
+        verify(rcMock).senseSoup(new MapLocation(6,6));
+        verify(rcMock).canSenseLocation(new MapLocation(6,6));
+    }
 
+    @Test
+    public void buildVaporator() throws GameActionException {
+        minerMock.numRefineries = 1;
+        minerMock.mustBuildRefinery = false;
+        minerMock.numLandscapers = 6;
+        minerMock.numVaporators = 1;
+        when(rcMock.getTeamSoup()).thenReturn(550);
+        when(rcMock.isReady()).thenReturn(true);
+        when(rcMock.canBuildRobot(RobotType.VAPORATOR, Util.randomDirection())).thenReturn(true);
+        when(rcMock.getRoundNum()).thenReturn(400);
+//        when(rcMock.buildRobot(RobotType.VAPORATOR, Util.randomDirection())).then(
+//        doThrow(new GameActionException(GameActionExceptionType.CANT_DO_THAT, "I think")).when(rcMock).buildRobot(RobotType.VAPORATOR, Util.randomDirection());
+//        doAnswer(new Answer() {
+//            @Override
+//            public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
+//                return null;
+//            }
+//        }).when(rcMock).buildRobot(RobotType.VAPORATOR, Util.randomDirection());
+//        when(minerMock.tryBuild(RobotType.VAPORATOR, Util.randomDirection())).thenReturn(true);
+        boolean result = minerMock.buildVaporator();
+        assertFalse(result);
+    }
 
 }

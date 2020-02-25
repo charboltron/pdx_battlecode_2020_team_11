@@ -309,7 +309,6 @@ public class RobotTest {
 
     @Test
     public void takingTurnIncrementsTurnCount() throws GameActionException{
-
         Robot robot = new Robot(rc);
         robot.takeTurn();
         assertEquals(1, robot.turnCount);
@@ -319,7 +318,7 @@ public class RobotTest {
     }
 
     @Test
-    public void successfulBuildBuildingReturnsTrue() throws GameActionException {
+    public void successfulBuildBuildingReturnsFalse() throws GameActionException {
         Robot robot = new Robot(rc);
         boolean result = robot.tryBuild(RobotType.MINER, Util.randomDirection());
         assertEquals(result, false);
