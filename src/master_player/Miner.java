@@ -65,15 +65,17 @@ public class Miner extends Unit {
         comms.getMessages();
     }
 
-    private void buildVaporator() throws GameActionException {
+    public boolean buildVaporator() throws GameActionException {
         if(mustBuildRefinery && numRefineries < 1){
-            return;
+            return false;
         }
         if (numLandscapers > 5 && rc.getTeamSoup() > 500 && rc.getRoundNum() > 300 && numVaporators < 3) {
             if (tryBuild(RobotType.VAPORATOR, Util.randomDirection())) {
                 System.out.println("Teamsoup: " + rc.getTeamSoup() + ", RoundNum: " + rc.getRoundNum() + " build a Vaporator");
+                return true;
             }
         }
+        return false;
     }
 
 //        RobotInfo [] nearbyVaporators = rc.senseNearbyRobots();
@@ -93,7 +95,7 @@ public class Miner extends Unit {
         }
     }
 
-    private void buildRefinery() throws GameActionException {
+    public void buildRefinery() throws GameActionException {
         if (rc.isReady() && teamSoup > RobotType.REFINERY.cost && numRefineries < 3) {
             if(mustBuildRefinery){
                 if(mustBuildRefinery && hqLoc.distanceSquaredTo(myLoc) > 24 && tryBuild(RobotType.REFINERY, Util.randomDirection()))
@@ -241,7 +243,7 @@ public class Miner extends Unit {
         } else return false;
     }
 
-    void checkIfSoupGone() throws GameActionException {
+    public void checkIfSoupGone() throws GameActionException {
         if (soupLocations.size() > 0 && soupLocations.contains(nearestSoup)) {
             if (rc.canSenseLocation(nearestSoup)
                     && rc.senseSoup(nearestSoup) == 0) {
