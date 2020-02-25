@@ -160,6 +160,11 @@ public class Miner extends Unit {
             RobotInfo[] robots = rc.senseNearbyRobots(24);
             for (RobotInfo robot : robots) {
                 if (robot.type == RobotType.REFINERY && robot.team == rc.getTeam()) {
+                    for(RobotInfo otherRobot: robots){
+                        if(otherRobot.type == RobotType.NET_GUN){
+                            return false; //we already have one
+                        }
+                    }
                     if(tryBuild(RobotType.NET_GUN, Util.randomDirection())) {
                         System.out.println("created a net gun near Refinery");
                         return true;

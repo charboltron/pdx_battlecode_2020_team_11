@@ -122,7 +122,6 @@ public class Communications {
     public void broadcastRobotCreation(MapLocation loc, RobotType robotType, Team team, int transactionBid) throws GameActionException {
         if(broadcastedCreation) return; //don't re-broadcast
 
-
         if(robotType == null){
             return; //testing
         }
@@ -140,11 +139,14 @@ public class Communications {
             message[3] = loc.y; // y coord of Robot
             message[4] = ROBOT_INFORMATION;
             message[6] = teamSecret2;
+//            for(int i = 0; i < 7; i++) {
+//                System.out.println(message[i]);
+//            }
             if (rc.canSubmitTransaction(message, transactionBid)) {
                 rc.submitTransaction(message, transactionBid);
                 broadcastedCreation = true;
                 System.out.println(messageType[robotCode-100]);
-                System.out.println("msg broadcast at round: "+rc.getRoundNum());
+//                System.out.println("msg broadcast at round: "+rc.getRoundNum());
             }
         }
     }
