@@ -24,18 +24,24 @@ public class LandscaperTest {
     @Before
     public void setup() throws GameActionException {
         when(rcMock.isReady()).thenReturn(true);
-        when(rcMock.canDigDirt(Direction.CENTER)).thenReturn(true);
-        when(rcMock.canMove(Direction.CENTER)).thenReturn(true);
+        when(rcMock.canDigDirt(Direction.NORTHEAST)).thenReturn(true);
+        when(rcMock.canMove(Direction.NORTHEAST)).thenReturn(true);
         when(rcMock.getLocation()).thenReturn(new MapLocation(5, 5));
         when(rcMock.senseFlooding(new MapLocation(5, 5))).thenReturn(false);
     }
 
     @Test
-    public void tryDig() throws GameActionException {
+    public void tryDigHQNull() throws GameActionException {
+        lsMock.hqLoc = null;
         boolean result = lsMock.tryDig(new MapLocation(5,5));
         assertEquals(false, result);
-
     }
 
+    @Test
+    public void tryDigHQNotNull() throws GameActionException {
+        lsMock.hqLoc = new MapLocation(1,1);
+        boolean result = lsMock.tryDig(new MapLocation(5,5));
+        assertEquals(true, result);
+    }
 
 }

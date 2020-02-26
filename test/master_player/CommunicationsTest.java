@@ -85,6 +85,21 @@ public class CommunicationsTest {
     }
 
     @Test
+    public void broadcastNeedDrone() throws GameActionException {
+        when(rcMock.canSubmitTransaction(new int[7], 3)).thenReturn(true);
+        commsMock.broadcastNeedSentinelDrone(100);
+        assertEquals("broadcasting HQ off limits!\n", outContent.toString());
+    }
+
+    @Test
+    public void broadcastHQOffLimits() throws GameActionException {
+        when(rcMock.canSubmitTransaction(new int[7], 3)).thenReturn(true);
+        commsMock.broadcastHQOffLimits();
+        assertEquals("broadcasting HQ off limits!\n", outContent.toString());
+    }
+
+
+    @Test
     public void getRobotCode() throws GameActionException{
 
         int code;
