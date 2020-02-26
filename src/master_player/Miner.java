@@ -53,10 +53,10 @@ public class Miner extends Unit {
         Direction dir = getDirToMine();
         tryMine(dir);
 
+        buildVaporator();
         buildDesignSchool();
         //buildRefinery();
         buildFulFillmentCenter();
-        buildVaporator();
 
         checkIfNeedToRefine();
         updateSoupAndMove();
@@ -66,10 +66,11 @@ public class Miner extends Unit {
     }
 
     public boolean buildVaporator() throws GameActionException {
+        if(!rc.isReady()){return false;}
         if(mustBuildRefinery && numRefineries < 1){
             return false;
         }
-        if (numLandscapers > 5 && rc.getTeamSoup() > 500 && rc.getRoundNum() > 300 && numVaporators < 3) {
+        if (rc.getTeamSoup() > RobotType.VAPORATOR.cost && numVaporators < 2 && hqLoc.distanceSquaredTo(myLoc) > 5) {
             if (tryBuild(RobotType.VAPORATOR, Util.randomDirection())) {
                 System.out.println("Teamsoup: " + rc.getTeamSoup() + ", RoundNum: " + rc.getRoundNum() + " build a Vaporator");
                 return true;
@@ -96,18 +97,25 @@ public class Miner extends Unit {
     }
 
     public void buildRefinery() throws GameActionException {
-        if (rc.isReady() && teamSoup > RobotType.REFINERY.cost && numRefineries < 3) {
+        if (rc.isReady() && teamSoup > RobotType.REFINERY.cost && numRefineries < 2) {
             if(mustBuildRefinery){
                 if(mustBuildRefinery && hqLoc.distanceSquaredTo(myLoc) > 24 && tryBuild(RobotType.REFINERY, Util.randomDirection()))
                     System.out.println("created a refinery");{
                     mustBuildRefinery = false;
                 }
             }
+            RobotInfo[] robots = rc.senseNearbyRobots(24);
+            for (RobotInfo robot : robots) {
+                if (robot.type == RobotType.REFINERY && robot.team == rc.getTeam()) {
+                    return;
+                }
+            }
             if (!hqLoc.isWithinDistanceSquared(rc.getLocation(), 25)
-                    && !nearestRefinery.isWithinDistanceSquared(rc.getLocation(), 25)
-                    && tryBuild(RobotType.REFINERY, Util.randomDirection()))
+                && !nearestRefinery.isWithinDistanceSquared(rc.getLocation(), 25)
+                && tryBuild(RobotType.REFINERY, Util.randomDirection())) {
                 System.out.println("created a refinery");
                 mustBuildRefinery = false;
+            }
         }
     }
 
