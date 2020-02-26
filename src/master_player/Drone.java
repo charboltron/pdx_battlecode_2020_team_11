@@ -60,7 +60,8 @@ public class Drone extends Unit {
         if (!cow_present&&isCowAround()) {
             pickUpCow();
         }
-        rc.move(rc.getLocation().directionTo(new MapLocation(33, 33)));
+        if(cow_present){ nav.droneMove(rc.getLocation().directionTo(new MapLocation(33, 33)));}
+        else{nav.goTo(Util.randomDirection());}
 
     }
     public boolean isCowAround() throws GameActionException {
@@ -96,7 +97,7 @@ public class Drone extends Unit {
                     return true;
                 }
             } else {
-                rc.move(Util.randomDirection());
+                nav.droneMove(Util.randomDirection());
                 return false;
             }
         }
