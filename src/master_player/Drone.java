@@ -24,7 +24,7 @@ public class Drone extends Unit {
         super.takeTurn();
 
         int r = rc.getRoundNum();
-        nav.lastThreeSpots[r%3] = myLoc;
+        if(rc.isReady()){ nav.lastThreeSpots[r%3] = myLoc;}
 //        if(nav.stuckInPosition()){nav.goTo((Util.randomDirection()));}
 
         myLoc = rc.getLocation();
@@ -119,6 +119,7 @@ public class Drone extends Unit {
             int distanceToHq = myLoc.distanceSquaredTo(hqLoc);
             Direction directionToHQ = myLoc.directionTo(hqLoc);
             System.out.println("D to HQ: "+directionToHQ);
+            if(rc.getRoundNum() % 7 == 0 || nav.stuckInPosition()){nav.goTo(Util.randomDirection());}
             if(distanceToHq > 30){
                 nav.firstDroneMove(directionToHQ);
             }else if(distanceToHq < 15){

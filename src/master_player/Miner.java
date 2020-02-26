@@ -97,18 +97,25 @@ public class Miner extends Unit {
     }
 
     public void buildRefinery() throws GameActionException {
-        if (rc.isReady() && teamSoup > RobotType.REFINERY.cost && numRefineries < 3) {
+        if (rc.isReady() && teamSoup > RobotType.REFINERY.cost && numRefineries < 2) {
             if(mustBuildRefinery){
                 if(mustBuildRefinery && hqLoc.distanceSquaredTo(myLoc) > 24 && tryBuild(RobotType.REFINERY, Util.randomDirection()))
                     System.out.println("created a refinery");{
                     mustBuildRefinery = false;
                 }
             }
+            RobotInfo[] robots = rc.senseNearbyRobots(24);
+            for (RobotInfo robot : robots) {
+                if (robot.type == RobotType.REFINERY && robot.team == rc.getTeam()) {
+                    return;
+                }
+            }
             if (!hqLoc.isWithinDistanceSquared(rc.getLocation(), 25)
-                    && !nearestRefinery.isWithinDistanceSquared(rc.getLocation(), 25)
-                    && tryBuild(RobotType.REFINERY, Util.randomDirection()))
+                && !nearestRefinery.isWithinDistanceSquared(rc.getLocation(), 25)
+                && tryBuild(RobotType.REFINERY, Util.randomDirection())) {
                 System.out.println("created a refinery");
                 mustBuildRefinery = false;
+            }
         }
     }
 
