@@ -58,9 +58,7 @@ public class Drone extends Unit {
         if(!rc.isReady()) return;
         //Todo: make movement for other drones.
         if (!cow_present&&isCowAround()) {
-            if(pickUpCow()){
-
-            }
+            pickUpCow();
         }
         rc.move(rc.getLocation().directionTo(new MapLocation(33, 33)));
 

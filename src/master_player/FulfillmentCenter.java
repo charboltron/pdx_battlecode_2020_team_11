@@ -17,7 +17,7 @@ public class FulfillmentCenter extends Building {
 
         if(comms.onlyOneMessageToRead()){comms.getMessages();}
 
-//        if (turnCount % 10 ==0 && numDrones < 3) {
+       /*if (turnCount % 10 ==0 && numDrones < 3) {*/
             if (numDrones < 3) {
             if (tryBuild(RobotType.DELIVERY_DRONE,Util.randomDirection())) {
                 System.out.println("drone built");
