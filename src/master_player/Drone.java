@@ -88,7 +88,7 @@ public class Drone extends Unit {
 
     private void otherDroneActions() throws GameActionException {
         if(!rc.isReady()) return;
-            //Todo: make movement for other drones.
+        //Todo: make movement for other drones.
         nav.droneMove(Util.randomDirection());
 
 
