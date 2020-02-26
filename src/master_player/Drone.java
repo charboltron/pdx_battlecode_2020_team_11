@@ -11,6 +11,7 @@ public class Drone extends Unit {
     int roundCreated;
     boolean checkedIfFirst;
     int droneCount = 0;
+    boolean cow_present = false;
 
     public Drone(RobotController r) {
         super(r);
@@ -18,6 +19,7 @@ public class Drone extends Unit {
         firstDrone = false;
         roundCreated = rc.getRoundNum();
         checkedIfFirst = false;
+
     }
 
     public void takeTurn() throws GameActionException{
@@ -38,44 +40,11 @@ public class Drone extends Unit {
         if(!firstDrone){
             otherDroneActions();
         }
-
-//        Team enemy = rc.getTeam().opponent();
-//        RobotInfo[] enemiesInRange = rc.senseNearbyRobots(GameConstants.NET_GUN_SHOOT_RADIUS_SQUARED, enemy);
-
-
-        /*rc.move(Util.randomDirection());*/
-//        rc.move(rc.getLocation().directionTo(new MapLocation(33, 29)));
-
-
-//        System.out.println("I picked up"+ enemiesInRange[0].getID());
-//
-//
-//        if (enemiesInRange.length > 0) {
-//            // Pick up a first robot within range
-//            rc.pickUpUnit(enemiesInRange[0].getID());
-//            System.out.println("I picked up " + enemiesInRange[0].getID() + "!");
-//        }
-//
-//
-//
-//        if (!rc.isCurrentlyHoldingUnit()) {
-//           // See if there are any enemy robots within capturing range
-//            RobotInfo[] robots = rc.senseNearbyRobots(GameConstants.DELIVERY_DRONE_PICKUP_RADIUS_SQUARED, enemy);
-//            if (robots.length > 0) {
-//                // Pick up a first robot within range
-//                rc.pickUpUnit(robots[0].getID());
-//                System.out.println("I picked up " + robots[0].getID() + "!");
-//            }
-//        } else {
-//            // No close robots, so search for robots within sight radius
-//            nav.goTo(Util.randomDirection());
-//        }
-
         comms.getMessages();
         comms.updateRobotCounts();
     }
 
-    private void scoutSoup() throws GameActionException {
+    public void scoutSoup() throws GameActionException {
         if(!rc.isReady()){return;}
         for (Direction dir : Util.directions) {
             MapLocation newLoc = myLoc.add(dir);
@@ -85,16 +54,60 @@ public class Drone extends Unit {
             }
         }
     }
-
     private void otherDroneActions() throws GameActionException {
         if(!rc.isReady()) return;
-            //Todo: make movement for other drones.
-        nav.droneMove(Util.randomDirection());
+        //Todo: make movement for other drones.
+        if (!cow_present&&isCowAround()) {
+            if(pickUpCow()){
 
+            }
+        }
+        rc.move(rc.getLocation().directionTo(new MapLocation(33, 33)));
+
+    }
+    public boolean isCowAround() throws GameActionException {
+        RobotInfo[] robots = rc.senseNearbyRobots(rc.getCurrentSensorRadiusSquared());
+        for (RobotInfo e : robots) {
+            if (e.type == RobotType.COW) {
+                //Found cow
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean pickUpCow() throws GameActionException {
+        //find cow
+        MapLocation cowloc=null;
+        int cow_id=-1;
+        RobotInfo[] robots = rc.senseNearbyRobots(rc.getCurrentSensorRadiusSquared());
+        for (RobotInfo e : robots) {
+            if (e.type == RobotType.COW) {
+                cow_id=e.getID();
+                cowloc = new MapLocation(e.getLocation().x, e.getLocation().y);
+                break;
+            }
+        }
+
+        if(cow_id>=0) {
+            if (rc.getLocation().distanceSquaredTo(cowloc) <= 2) {
+                //pick up cow
+                if (rc.canPickUpUnit(cow_id)) {
+                    rc.pickUpUnit(cow_id);
+                    cow_present = true;
+                    return true;
+                }
+            } else {
+                rc.move(Util.randomDirection());
+                return false;
+            }
+        }
+        return false;
 
     }
 
-    private void checkIfFirstDrone() throws GameActionException {
+
+    public boolean checkIfFirstDrone() throws GameActionException {
         if(rc.isReady()){
 
             System.out.println(comms.numDrones);
@@ -105,7 +118,9 @@ public class Drone extends Unit {
                 System.out.println("I'm not the first drone!");
             }
             checkedIfFirst = true;
+            return true;
         }
+        return false;
     }
 
     public void reportEnemyHQ() throws GameActionException {

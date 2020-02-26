@@ -137,7 +137,6 @@ public class Miner extends Unit {
         }
     }
 
-
     private void buildDesignSchool() throws GameActionException{
         if (rc.isReady() && teamSoup > RobotType.DESIGN_SCHOOL.cost && numDesignSchools < 3 && numRefineries > 0){
             if(!hqLoc.isWithinDistanceSquared(rc.getLocation(), 8) && tryBuild(RobotType.DESIGN_SCHOOL, Util.randomDirection()))
@@ -145,7 +144,7 @@ public class Miner extends Unit {
         }
     }
 
-    private void buildFulFillmentCenter() throws GameActionException{
+    public void buildFulFillmentCenter() throws GameActionException{
         if (rc.isReady() && numDesignSchools > 1 && teamSoup > RobotType.FULFILLMENT_CENTER.cost && numFulFillmentCenters < 1){
             if(mustBuildRefinery && numRefineries < 1){
                 return;

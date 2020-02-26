@@ -137,5 +137,17 @@ public class MinerTest {
         boolean result = minerMock.buildVaporator();
         assertFalse(result);
     }
+//    @Test
+//    public void buildFulFillmentCenterTest() throws GameActionException{
+//        minerMock.numDesignSchools = 2;
+//        minerMock.teamSoup =600;
+//        minerMock.numFulFillmentCenters = 0;
+//        when(rcMock.isReady()).thenReturn(true);
+//        when(rcMock.canBuildRobot(RobotType.FULFILLMENT_CENTER, Util.randomDirection())).thenReturn(true);
+//        minerMock.buildFulFillmentCenter();
+//        verify(rcMock.canBuildRobot(RobotType.FULFILLMENT_CENTER, Util.randomDirection()));
+//
+//
+//    }
 
 }
