@@ -53,10 +53,10 @@ public class Miner extends Unit {
         Direction dir = getDirToMine();
         tryMine(dir);
 
+        buildVaporator();
         buildDesignSchool();
         //buildRefinery();
         buildFulFillmentCenter();
-        buildVaporator();
 
         checkIfNeedToRefine();
         updateSoupAndMove();
@@ -66,10 +66,11 @@ public class Miner extends Unit {
     }
 
     public boolean buildVaporator() throws GameActionException {
+        if(!rc.isReady()){return false;}
         if(mustBuildRefinery && numRefineries < 1){
             return false;
         }
-        if (numLandscapers > 5 && rc.getTeamSoup() > 500 && rc.getRoundNum() > 300 && numVaporators < 3) {
+        if (rc.getTeamSoup() > RobotType.VAPORATOR.cost && numVaporators < 2 && hqLoc.distanceSquaredTo(myLoc) > 5) {
             if (tryBuild(RobotType.VAPORATOR, Util.randomDirection())) {
                 System.out.println("Teamsoup: " + rc.getTeamSoup() + ", RoundNum: " + rc.getRoundNum() + " build a Vaporator");
                 return true;
