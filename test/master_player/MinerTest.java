@@ -115,27 +115,30 @@ public class MinerTest {
         verify(rcMock).canSenseLocation(new MapLocation(6,6));
     }
 
-//    @Test
-//    public void buildVaporator() throws GameActionException {
-//        minerMock.numRefineries = 1;
-//        minerMock.mustBuildRefinery = false;
-//        minerMock.numLandscapers = 6;
-//        minerMock.numVaporators = 1;
-//        when(rcMock.getTeamSoup()).thenReturn(550);
-//        when(rcMock.isReady()).thenReturn(true);
-//        when(rcMock.canBuildRobot(RobotType.VAPORATOR, Util.randomDirection())).thenReturn(true);
-//        when(rcMock.getRoundNum()).thenReturn(400);
-////        when(rcMock.buildRobot(RobotType.VAPORATOR, Util.randomDirection())).then(
-////        doThrow(new GameActionException(GameActionExceptionType.CANT_DO_THAT, "I think")).when(rcMock).buildRobot(RobotType.VAPORATOR, Util.randomDirection());
-////        doAnswer(new Answer() {
-////            @Override
-////            public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
-////                return null;
-////            }
-////        }).when(rcMock).buildRobot(RobotType.VAPORATOR, Util.randomDirection());
-////        when(minerMock.tryBuild(RobotType.VAPORATOR, Util.randomDirection())).thenReturn(true);
-//        boolean result = minerMock.buildVaporator();
-//        assertFalse(result);
-//    }
+    @Test
+    public void buildVaporator() throws GameActionException {
+        minerMock.numRefineries = 0;
+        minerMock.mustBuildRefinery = false;
+        minerMock.numLandscapers = 6;
+        minerMock.numVaporators = 1;
+        minerMock.hqLoc = new MapLocation(1, 1);
+        minerMock.myLoc = new MapLocation(8, 8);
+//        when(minerMock.hqLoc.distanceSquaredTo(minerMock.myLoc)).thenReturn(6);
+        when(rcMock.getTeamSoup()).thenReturn(550);
+        when(rcMock.isReady()).thenReturn(true);
+        when(rcMock.canBuildRobot(RobotType.VAPORATOR, Util.randomDirection())).thenReturn(true);
+        when(rcMock.getRoundNum()).thenReturn(400);
+//        when(rcMock.buildRobot(RobotType.VAPORATOR, Util.randomDirection())).then(
+//        doThrow(new GameActionException(GameActionExceptionType.CANT_DO_THAT, "I think")).when(rcMock).buildRobot(RobotType.VAPORATOR, Util.randomDirection());
+//        doAnswer(new Answer() {
+//            @Override
+//            public Object answer(InvocationOnMock invocationOnMock) throws Throwable {
+//                return null;
+//            }
+//        }).when(rcMock).buildRobot(RobotType.VAPORATOR, Util.randomDirection());
+//        when(minerMock.tryBuild(RobotType.VAPORATOR, Util.randomDirection())).thenReturn(true);
+        boolean result = minerMock.buildVaporator();
+        assertFalse(result);
+    }
 
 }
