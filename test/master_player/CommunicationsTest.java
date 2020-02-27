@@ -92,6 +92,14 @@ public class CommunicationsTest {
     }
 
     @Test
+    public void broadcastSoupLoc() throws GameActionException {
+        when(rcMock.canSubmitTransaction(new int[7], 3)).thenReturn(true);
+        commsMock.broadcastSoupLocation(new MapLocation(6,6));
+        assertEquals("new soup!" + new MapLocation(6,6) + "\n", outContent.toString());
+
+    }
+
+    @Test
     public void broadcastHQOffLimits() throws GameActionException {
         when(rcMock.canSubmitTransaction(new int[7], 3)).thenReturn(true);
         commsMock.broadcastHQOffLimits();
